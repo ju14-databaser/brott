@@ -1,10 +1,17 @@
 package controller;
 
+import model.Crime;
+import model.CrimeHandler;
+
+
 public class BrottController {
 	
-	public static void main(String[] args) {
-		System.out.println("Testar att göra commit med svn från eclipse");
-	
+	public String getCrime(Model model){
+		CrimeHandler crimeHandler = new CrimeHandler();
+		
+		Crime crime = crimeHandler.getCrimeFromPolice();
+		model.addAttribute("crime",crime);
+		return "home";
 	}
 
 }
