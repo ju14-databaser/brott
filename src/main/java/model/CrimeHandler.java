@@ -11,6 +11,7 @@ public class CrimeHandler {
 		XMLParser xmlParser = new XMLParser();
 
 		Crime crime = xmlParser.parseTOCrime(xml);
+		
 		return crime;
 
 	}

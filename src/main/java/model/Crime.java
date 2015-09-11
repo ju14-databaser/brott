@@ -13,10 +13,13 @@ public class Crime {
 	public Crime(String title, String description) {
 		this.title = title;
 		this.description = description;
+		createLocation();
+		
 	}
 
 	private void createLocation() {
-
+		int i = description.indexOf('.');
+		this.location = this.description.substring(0, i) + " Sweden";
 	}
 
 	private void createDate() {

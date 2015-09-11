@@ -5,10 +5,83 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-</head>
-<body>
 
-<h1>brott!!</h1>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+    <style>
+      #map {
+        width: 1000px;
+        height: 700px;
+      }
+    </style>
+    <script>
+    var geocoder;
+    var map;
+    var testtitel = "${crime.title}";
+    var testdesc = "${crime.description }";
+    
+    function initialize() {
+      geocoder = new google.maps.Geocoder();
+      var latlng = new google.maps.LatLng(59.326142,17.9875455);
+      var mapOptions = {
+        zoom: 8,
+        center: latlng
+      }
+      map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      initMarkerTest();
+    }
+
+    function codeAddress() {
+      var address = document.getElementById("address").value;
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location
+          });
+        } else {
+          alert("Geocode was not successful for the following reason: " + status);
+        }
+      });
+    }
+    
+    
+    var infowindow = new google.maps.InfoWindow({
+        content: testdesc
+      });
+    
+    function initMarkerTest(){
+    	var address = "${crime.location}";
+    	
+    	geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              map.setCenter(results[0].geometry.location);
+              var marker = new google.maps.Marker({
+                  map: map,
+                  position: results[0].geometry.location,
+                  title: "${crime.title}"
+              });
+              
+              marker.addListener('click', function() {
+            	    infowindow.open(map, marker);
+            	  });
+            } else {
+              alert("Geocode was not successful for the following reason: " + status);
+            }
+          });
+    	
+    }
+
+      
+    </script>
+
+</head>
+<body onload="initialize()">
+ <div id="map"></div>
+  <div>
+    <input id="address" type="textbox" value="Stockholm">
+    <input type="button" value="testa" onclick="codeAddress()">
+  </div>
 
 ${crime.title }<br>
 ${crime.description }<br>

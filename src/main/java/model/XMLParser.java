@@ -53,6 +53,7 @@ public class XMLParser {
 		}
 
 		Crime crime = new Crime(title, description);
+		
 		return crime;
 	}
 }
