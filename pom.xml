@@ -79,6 +79,11 @@
 			<artifactId>google-api-client-gson</artifactId>
 			<version>1.20.0</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
 	</dependencies>
 	<packaging>war</packaging>
 
