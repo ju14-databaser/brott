@@ -23,6 +23,8 @@ public class BrottController {
 	public String getCrime(Model model) {
 
 		Crime crime = crimeHandler.getCrimeFromPolice();
+		crime = crimeHandler.test(crime);
+		
 		model.addAttribute("crime", crime);
 		return "index";
 	}

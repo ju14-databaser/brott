@@ -27,7 +27,7 @@ public class Crime {
 
 	private void createLocation() {
 		int i = description.indexOf('.');
-		this.location = this.description.substring(0, i) + " Sweden";
+		this.location = this.description.substring(0, i) + " ,Sweden";
 	}
 
 	/**

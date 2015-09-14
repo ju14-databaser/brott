@@ -16,8 +16,7 @@
     <script>
     var geocoder;
     var map;
-    var testtitel = "${crime.title}";
-    var testdesc = "${crime.description }";
+
     
     function initialize() {
       geocoder = new google.maps.Geocoder();
@@ -32,6 +31,7 @@
 
     function codeAddress() {
       var address = document.getElementById("address").value;
+      
       geocoder.geocode( { 'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           map.setCenter(results[0].geometry.location);
@@ -47,29 +47,25 @@
     
     
     var infowindow = new google.maps.InfoWindow({
-        content: testdesc
+        content: "test"
       });
     
     function initMarkerTest(){
-    	var address = "${crime.location}";
-    	
-    	geocoder.geocode( { 'address': address}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              map.setCenter(results[0].geometry.location);
+    			var longitud=${crime.longitud};
+    			var latitud=${crime.latitud};
+    			var LatLng = {lat: latitud, lng: longitud};
+    			
+              map.setCenter(LatLng);
               var marker = new google.maps.Marker({
                   map: map,
-                  position: results[0].geometry.location,
-                  title: "${crime.title}"
+                  position: LatLng,
+                  title: "test"
               });
               
               marker.addListener('click', function() {
             	    infowindow.open(map, marker);
             	  });
-            } else {
-              alert("Geocode was not successful for the following reason: " + status);
-            }
-          });
-    	
+         
     }
 
       
