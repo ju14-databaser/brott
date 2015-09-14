@@ -22,6 +22,7 @@ public class BrottController {
 	@RequestMapping("/Brott")
 	public String getCrime(Model model) {
 
+		System.out.println("version2");
 		Crime crime = crimeHandler.getCrimeFromPolice();
 		model.addAttribute("crime", crime);
 		return "index";
