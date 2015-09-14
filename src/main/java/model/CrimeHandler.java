@@ -1,16 +1,11 @@
 package model;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.mapsengine.MapsEngine;
-import com.google.api.services.mapsengine.MapsEngineRequestInitializer;
-import com.google.api.services.mapsengine.model.Feature;
-import com.google.api.services.mapsengine.model.FeaturesListResponse;
-import com.google.api.services.mapsengine.model.GeoJsonPoint;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class CrimeHandler {
@@ -26,42 +21,15 @@ public class CrimeHandler {
 
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
+		String stringToReadURLFrom = "https://maps.googleapis.com/maps/api/geocode/json?address=Stockholm,+Sweden";
 
-		String PUBLIC_BROWSER_KEY = "AIzaSyB_HBIFXrhqS66-qtfKJYh-rTafD3jwEFo";
-		MapsEngineRequestInitializer apiInitializer = new MapsEngineRequestInitializer(PUBLIC_BROWSER_KEY);
-		MapsEngine mapsEngine = new MapsEngine.Builder(new NetHttpTransport(), new GsonFactory(),
-				null).setMapsEngineRequestInitializer(apiInitializer).setApplicationName("MyFirstProject")
-				.build();
-		readFeaturesFromTable(mapsEngine);
-	}
+		RestTemplate restTemplate = new RestTemplate();
 
-	public static void readFeaturesFromTable(MapsEngine me) throws IOException {
-		// Query the table for offices in WA that are within 100km of Perth.
-		String SAMPLE_TABLE_ID = "12421761926155747447-06672618218968397709";
-		FeaturesListResponse featResp = me
-				.tables()
-				.features()
-				.list(SAMPLE_TABLE_ID)
-				.setVersion("published")
-				.setWhere(
-						"State='WA' AND ST_DISTANCE(geometry,ST_POINT(115.8589,-31.9522)) < 100000")
-				.execute();
-
-		for (Feature feat : featResp.getFeatures()) {
-			System.out.println("Properties: " + feat.getProperties().toString() + "\n\t" + "Name: "
-					+ feat.getProperties().get("Fcilty_nam") + "\n\t" + "Geometry Type: "
-					+ feat.getGeometry().getType());
-
-			if (feat.getGeometry() instanceof GeoJsonPoint) {
-				GeoJsonPoint point = (GeoJsonPoint) feat.getGeometry();
-				System.out.println("\t" + "Longitude: " + point.getCoordinates().get(0) + ", "
-						+ "Latitude: " + point.getCoordinates().get(1));
-			} else {
-				System.out.println("Only points are expected in this table!");
-				return;
-			}
-		}
+		ResponseEntity<AddressWrapper> entity = restTemplate.getForEntity(stringToReadURLFrom,
+				AddressWrapper.class);
+		Location location = entity.getBody().getResults()[0].getGeometry().getLocation();
+System.out.println(location);
 	}
 
 	private String getXMLCrime() {
