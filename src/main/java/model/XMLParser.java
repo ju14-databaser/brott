@@ -43,7 +43,7 @@ public class XMLParser {
 					System.out.println(description);
 				}
 			}
-
+			
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {

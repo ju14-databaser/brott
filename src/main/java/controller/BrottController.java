@@ -28,5 +28,6 @@ public class BrottController {
 		model.addAttribute("crime", crime);
 		return "index";
 	}
+	
 
 }

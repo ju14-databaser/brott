@@ -20,10 +20,10 @@ public class CrimeHandler {
 	}
 
 
-	public Crime  test(Crime crime){
+	public Crime test(Crime crime){
 		
 		String stringToReadURLFrom = "https://maps.googleapis.com/maps/api/geocode/json?address="+ crime.getLocation();
-
+		System.out.println(crime.getLocation());
 		RestTemplate restTemplate = new RestTemplate();
 
 		ResponseEntity<AddressWrapper> entity = restTemplate.getForEntity(stringToReadURLFrom,

@@ -19,15 +19,16 @@ public class Crime {
 	}
 
 	public Crime(String title, String description) {
-		this.title = title;
-		this.description = description;
+		 
+		this.title = title.replace("\r","").replace("\n","");
+		this.description = description.replace("\r","").replace("\n","");
 		createLocation();
 		createDate();
 	}
 
 	private void createLocation() {
 		int i = description.indexOf('.');
-		this.location = this.description.substring(0, i) + " ,Sweden";
+		this.location = this.description.substring(0, i) + ", Sweden";
 	}
 
 	/**
