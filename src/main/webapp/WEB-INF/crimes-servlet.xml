@@ -9,6 +9,7 @@
 	<mvc:annotation-driven />
 	<context:component-scan base-package="model" />
 	<context:component-scan base-package="controller" />
+	<context:component-scan base-package="service" />
 
 	<bean id="jspViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

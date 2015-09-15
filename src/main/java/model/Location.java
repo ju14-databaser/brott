@@ -2,7 +2,13 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Embeddable
 public class Location {
 
 	private String lat;

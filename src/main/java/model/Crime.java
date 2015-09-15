@@ -4,14 +4,29 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "CRIMES", schema = "STOCKHOLM")
 public class Crime {
 
 	private static final Date ERROR_DATE = new Date(0);
+
+	@Id
+	private int ID;
 	private String location;
+
+	@Transient
 	private String date;
 	private String title;
 	private String description;
 	private String crimeCat;
+	
+	@Embedded
 	private Location geoLocation;
 	private Date dateStamp;
 
@@ -35,9 +50,9 @@ public class Crime {
 	}
 
 	public Crime(String title, String description) {
-		 
-		this.title = title.replace("\r","").replace("\n","");
-		this.description = description.replace("\r","").replace("\n","");
+
+		this.title = title.replace("\r", "").replace("\n", "");
+		this.description = description.replace("\r", "").replace("\n", "");
 		createLocation();
 		createDate();
 	}
@@ -80,7 +95,6 @@ public class Crime {
 	public String getDescription() {
 		return description;
 	}
-
 
 	public Date getDateStamp() {
 		return dateStamp;
