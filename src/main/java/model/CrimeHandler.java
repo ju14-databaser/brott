@@ -29,8 +29,7 @@ public class CrimeHandler {
 		ResponseEntity<AddressWrapper> entity = restTemplate.getForEntity(stringToReadURLFrom,
 				AddressWrapper.class);
 		Location location = entity.getBody().getResults()[0].getGeometry().getLocation();
-		crime.setLatitud(location.getLat());
-		crime.setLongitud(location.getLng());
+		crime.setGeoLocation(location);
 		System.out.println(location);
 		
 		return crime;

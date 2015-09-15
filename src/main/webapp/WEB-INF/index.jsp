@@ -17,8 +17,8 @@
 <script>
 	var geocoder;
 	var map;
-	var longitud = ${crime.longitud};
-	var latitud = ${crime.latitud};
+	var longitud = ${crime.geoLocation.lng};
+	var latitud = ${crime.geoLocation.lat};
 	
 	var LatLng = {
 		lat : latitud,

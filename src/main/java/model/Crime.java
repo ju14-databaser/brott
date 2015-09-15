@@ -11,9 +11,25 @@ public class Crime {
 	private String date;
 	private String title;
 	private String description;
-	private String latitud;
-	private String longitud;
+	private String crimeCat;
+	private Location geoLocation;
 	private Date dateStamp;
+
+	public String getCrimeCat() {
+		return crimeCat;
+	}
+
+	public void setCrimeCat(String crimeCat) {
+		this.crimeCat = crimeCat;
+	}
+
+	public Location getGeoLocation() {
+		return geoLocation;
+	}
+
+	public void setGeoLocation(Location geoLocation) {
+		this.geoLocation = geoLocation;
+	}
 
 	public Crime() {
 	}
@@ -65,21 +81,6 @@ public class Crime {
 		return description;
 	}
 
-	public String getLatitud() {
-		return latitud;
-	}
-
-	public void setLatitud(String latitud) {
-		this.latitud = latitud;
-	}
-
-	public String getLongitud() {
-		return longitud;
-	}
-
-	public void setLongitud(String longitud) {
-		this.longitud = longitud;
-	}
 
 	public Date getDateStamp() {
 		return dateStamp;
