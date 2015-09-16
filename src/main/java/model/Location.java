@@ -1,11 +1,8 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Embeddable
@@ -28,6 +25,13 @@ public class Location {
 
 	public void setLng(String lng) {
 		this.lng = lng;
+	}
+
+	public boolean isEmpty() {
+		if (lat == null && lng == null) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override

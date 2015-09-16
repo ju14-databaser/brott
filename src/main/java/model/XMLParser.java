@@ -47,7 +47,6 @@ public class XMLParser {
 			Document document = documentBuilder.parse(POLICE_RSS);
 			LOGGER.error("Börjar parsning...");
 			document.getDocumentElement().normalize();
-			LOGGER.error("documentet normaliserat...");
 			NodeList items = document.getElementsByTagName("item");
 			for (int i = 0; i < items.getLength()-1; i++) {
 				Node item = items.item(i);
@@ -56,7 +55,6 @@ public class XMLParser {
 					String title = getValue(itemE, "title");
 					String description = getValue(itemE, "description");
 					crimes.add(new Crime(title, description));
-					System.out.println("Brott nr: " + i + " " + title + description);
 				}
 			}
 		} catch (SAXException e) {
@@ -72,12 +70,10 @@ public class XMLParser {
 		String title = "";
 		String description = "";
 		boolean error = false;
-		LOGGER.error("Inne i xml parser...");
 		try {
 			Document document = documentBuilder.parse(POLICE_RSS);
 			LOGGER.error("Börjar parsning...");
 			document.getDocumentElement().normalize();
-			LOGGER.error("documentet normaliserat...");
 			NodeList items = document.getElementsByTagName("item");
 			for (int i = 0; i < 1; i++) {
 				Node item = items.item(i);
@@ -97,7 +93,6 @@ public class XMLParser {
 		if (error) {
 			// TODO: errorhandling to avoid further errors in the Crime creation
 		}
-		LOGGER.error("Document parsed...");
 		Crime crime = new Crime(title, description);
 
 		documentBuilder.reset();

@@ -2,19 +2,34 @@ package model;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+
+import service.CrimesDAO;
 
 @Component
 public class CrimeHandler {
 
-	public Crime getCrimeFromPolice() {
+	private GeoLocationParser geoLocationParser;
+	private CrimesDAO crimesDAO;
+
+	public CrimeHandler() {
+	}
+
+	@Inject
+	public CrimeHandler(CrimesDAO crimesDAO) {
+		this.crimesDAO = crimesDAO;
+		geoLocationParser = new GeoLocationParser();
+	}
+
+	public Crime getLatestCrimeFromPolice() {
 
 		String xml = getXMLCrime();
 		XMLParser xmlParser = new XMLParser();
 
 		Crime crime = xmlParser.parseTOCrime(xml);
+		crime.setGeoLocation(geoLocationParser.getGeoLocation(crime.getLocation()));
 
 		return crime;
 
@@ -22,44 +37,43 @@ public class CrimeHandler {
 
 	public List<Crime> getAllCrimesFromPolice() {
 		XMLParser xmlParser = new XMLParser();
-		return xmlParser.parseAllCrimes();
-	}
 
-	public Crime getGeoLocation(Crime crime) {
-
-		String stringToReadURLFrom = "https://maps.googleapis.com/maps/api/geocode/json?address="
-				+ crime.getLocation();
-		System.out.println(crime.getLocation());
-		RestTemplate restTemplate = new RestTemplate();
-
-		ResponseEntity<AddressWrapper> entity = restTemplate.getForEntity(stringToReadURLFrom,
-				AddressWrapper.class);
-		Location location = entity.getBody().getResults()[0].getGeometry().getLocation();
-		crime.setGeoLocation(location);
-		System.out.println(location);
-
-		return crime;
-	}
-
-	
-	//TODO: Flytta till egen klass, har inte med crimes att göra
-	public Location addGeoLocation(String location) {
-
-		String stringToReadURLFrom = "https://maps.googleapis.com/maps/api/geocode/json?address="
-				+ location;
-		System.out.println(location);
-		RestTemplate restTemplate = new RestTemplate();
-
-		ResponseEntity<AddressWrapper> entity = restTemplate.getForEntity(stringToReadURLFrom,
-				AddressWrapper.class);
-		
-		try {
-			return entity.getBody().getResults()[0].getGeometry().getLocation();
-		} catch (Exception e) {
-			// TODO: bra errorhandling
-			System.out.println("PROBLEM i geolocation: " + location);
-			return null;
+		List<Crime> crimes = xmlParser.parseAllCrimes();
+		if (crimes.size() > 0) {
+			crimes.forEach(crime -> crime.setGeoLocation(geoLocationParser.getGeoLocation(crime
+					.getLocation())));
 		}
+		return crimes;
+	}
+
+	public int updateGeoLocations() {
+		int updated = 0;
+
+		List<Crime> allCrimes = crimesDAO.getAllCrimes();
+		crimesDAO.openConnection();
+		
+		for (Crime crime : allCrimes) {
+
+			if (crime.getGeoLocation().isEmpty()) {
+				
+				Location geoLocation = geoLocationParser.getGeoLocation(crime.getLocation());
+				
+				if (!geoLocation.isEmpty()) {
+					crimesDAO.updateCrime(crime, geoLocation);
+					updated++;
+				}
+				
+			}
+			
+			if (updated == 10) {
+				crimesDAO.closeConnection();
+				return updated;
+
+			}
+
+		}
+		crimesDAO.closeConnection();
+		return updated;
 	}
 
 	private String getXMLCrime() {
