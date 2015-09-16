@@ -51,20 +51,20 @@ public class CrimeHandler {
 
 		List<Crime> allCrimes = crimesDAO.getAllCrimes();
 		crimesDAO.openConnection();
-		
+
 		for (Crime crime : allCrimes) {
 
-			if (crime.getGeoLocation().isEmpty()) {
-				
+			if (crime.getGeoLocation() == null) {
+
 				Location geoLocation = geoLocationParser.getGeoLocation(crime.getLocation());
-				
-				if (!geoLocation.isEmpty()) {
+
+				if (geoLocation != null) {
 					crimesDAO.updateCrime(crime, geoLocation);
 					updated++;
 				}
-				
+
 			}
-			
+
 			if (updated == 10) {
 				crimesDAO.closeConnection();
 				return updated;
