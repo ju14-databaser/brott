@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import model.Crime;
@@ -15,27 +17,42 @@ import service.CrimesDAO;
 public class BrottController {
 
 	private CrimeHandler crimeHandler;
-		private CrimesDAO crimesDAO;
+	private CrimesDAO crimesDAO;
 
 	@Inject
 	public BrottController(CrimeHandler crimeHandler, CrimesDAO crimesDAO) {
 		this.crimeHandler = crimeHandler;
 		this.crimesDAO = crimesDAO;
-		
+
 	}
 
 	@RequestMapping("/Brott")
 	public String getCrime(Model model) {
 		Crime crime = crimeHandler.getCrimeFromPolice();
-		crime = crimeHandler.test(crime);
-		
+		crime = crimeHandler.getGeoLocation(crime);
+
 		crimesDAO.openConnection();
 		crimesDAO.addCrime(crime);
 		crimesDAO.closeConnection();
-		
+
 		model.addAttribute("crime", crime);
 		return "index";
 	}
-	
+
+	@RequestMapping("/load") //TODO: Kolla spring-batch eller liknande om man vill schemalägga
+	public String loadDatabaseWithAllCrimes(Model model) {
+		List<Crime> allCrimesFromPolice = crimeHandler.getAllCrimesFromPolice();
+		allCrimesFromPolice.forEach(crime -> {
+			crime.setGeoLocation(crimeHandler.addGeoLocation(crime.getLocation()));
+			crimesDAO.openConnection();
+			crimesDAO.addCrime(crime);
+			crimesDAO.closeConnection();
+		});
+
+
+		model.addAttribute("crimeNo", allCrimesFromPolice.size());
+		model.addAttribute("crimes", allCrimesFromPolice);
+		return "allCrimes";
+	}
 
 }

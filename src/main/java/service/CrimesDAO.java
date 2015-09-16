@@ -19,6 +19,7 @@ public class CrimesDAO {
 
 	}
 
+	//TODO: titta på hur man kan göra detta deklarativt med spring
 	public void openConnection() {
 		factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 		em = factory.createEntityManager();

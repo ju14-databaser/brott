@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -17,6 +18,7 @@ public class Crime {
 	private static final Date ERROR_DATE = new Date(0);
 
 	@Id
+	@GeneratedValue
 	private int ID;
 	private String location;
 
@@ -59,6 +61,10 @@ public class Crime {
 
 	private void createLocation() {
 		int i = description.indexOf('.');
+		if (i == -1) {
+			i = description.length()-1;
+		}
+		
 		this.location = this.description.substring(0, i) + ", Sweden";
 	}
 
