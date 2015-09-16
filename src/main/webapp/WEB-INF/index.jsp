@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,80 +16,62 @@
 }
 </style>
 <script>
+
 	var geocoder;
 	var map;
-	var longitud = ${crime.geoLocation.lng};
-	var latitud = ${crime.geoLocation.lat};
-	
-	var LatLng = {
-		lat : latitud,
-		lng : longitud
-	};
-	
-	
+
 	function initialize() {
-		geocoder = new google.maps.Geocoder();
+	//	geocoder = new google.maps.Geocoder();
 		var mapOptions = {
-			zoom : 8,
-			center : LatLng
+			zoom : 8	
 		}
 		map = new google.maps.Map(document.getElementById("map"), mapOptions);
+		
 		initMarkerTest();
 	}
 
-	function codeAddress() {
-		var address = document.getElementById("address").value;
-
-		geocoder.geocode({
-			'address' : address
-		}, function(results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				map.setCenter(results[0].geometry.location);
-				var marker = new google.maps.Marker({
-					map : map,
-					position : results[0].geometry.location
-				});
-			} else {
-				alert("Geocode was not successful for the following reason: "
-						+ status);
-			}
-		});
-	}
-
-	var infowindow = new google.maps.InfoWindow({
-		content : '${crime.description}'
-	});
-
 	function initMarkerTest() {
 
+		// här ska loop kod in
 
-		map.setCenter(LatLng);
-		var marker = new google.maps.Marker({
-			map : map,
-			position : LatLng,
-			title : '${crime.title}'
-		});
+		<c:forEach items="${Crimes}" var="crimes"> // Startar for each
+			
+	
+			<c:if test="${not empty crimes.geoLocation.lat && not empty crimes.geoLocation.lng}"> // kollar så att det finns coordinater
+	
+				var geolat=${crimes.geoLocation.lat};
+				var geolng=${crimes.geoLocation.lng};
+				
+				var geoLocation = {
+					lat : geolat,
+					lng : geolng
+				};
+		
+				map.setCenter(geoLocation); // Sätter marker från koordinater
+				var marker = new google.maps.Marker({
+					map : map,
+					position : geoLocation,
+					title : '${crimes.title}'
+				});
+		
+				marker.addListener('click', function() {
+					infowindow.open(map, marker);
+				});
+		
+				var infowindow = new google.maps.InfoWindow({
+					content : '${crimes.description}'
+				});
+	
+			</c:if>
 
-		marker.addListener('click', function() {
-			infowindow.open(map, marker);
-		});
+		</c:forEach> // ###### Slutar for each
 
 	}
-	
-	
 </script>
 
 </head>
 <body onload="initialize()">
 	<div id="map"></div>
-	<div>
-		<input id="address" type="textbox" value="Stockholm"> <input
-			type="button" value="testa" onclick="codeAddress()">
-	</div>
-
-	${crime.title }
-	<br> ${crime.description }
-	<br>
 
 	<a href="<%=request.getContextPath()%>/testfil.html">länk lönk </a>
 
