@@ -27,7 +27,7 @@ public class Crime {
 	private String title;
 	private String description;
 	private String crimeCat;
-	
+
 	@Embedded
 	private Location geoLocation;
 	private Date dateStamp;
@@ -51,6 +51,17 @@ public class Crime {
 	public Crime() {
 	}
 
+	public int getID() {
+		return ID;
+	}
+	
+	@Override
+	public String toString() {
+		return "Crime [ID=" + ID + ", location=" + location + ", date=" + date + ", title=" + title
+				+ ", description=" + description + ", crimeCat=" + crimeCat + ", geoLocation="
+				+ geoLocation + ", dateStamp=" + dateStamp + "]";
+	}
+
 	public Crime(String title, String description) {
 
 		this.title = title.replace("\r", "").replace("\n", "");
@@ -62,9 +73,9 @@ public class Crime {
 	private void createLocation() {
 		int i = description.indexOf('.');
 		if (i == -1) {
-			i = description.length()-1;
+			i = description.length() - 1;
 		}
-		
+
 		this.location = this.description.substring(0, i) + ", Sweden";
 	}
 

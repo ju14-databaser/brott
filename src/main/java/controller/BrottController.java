@@ -28,12 +28,8 @@ public class BrottController {
 
 	@RequestMapping("/Brott")
 	public String getCrime(Model model) {
-		// Crime crime = crimeHandler.getCrimeFromPolice();
-		// crime = crimeHandler.getGeoLocation(crime);
 
-		crimesDAO.openConnection();
 		List<Crime> allCrimes = crimesDAO.getAllCrimes();
-		crimesDAO.closeConnection();
 
 		model.addAttribute("Crimes", allCrimes);
 		return "index";
