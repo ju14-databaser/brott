@@ -42,6 +42,7 @@
 				var geolat=${crimes.geoLocation.lat};
 				var geolng=${crimes.geoLocation.lng};
 				
+				
 				var geoLocation = {
 					lat : geolat,
 					lng : geolng
@@ -55,12 +56,11 @@
 				});
 		
 				marker.addListener('click', function() {
-					infowindow.open(map, marker);
+					infowindow.setContent('${crimes.description}');
+					infowindow.open(map, this);
 				});
 		
-				var infowindow = new google.maps.InfoWindow({
-					content : '${crimes.description}'
-				});
+				var infowindow = new google.maps.InfoWindow();
 	
 			</c:if>
 
