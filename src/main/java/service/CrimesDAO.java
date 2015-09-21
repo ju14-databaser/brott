@@ -9,6 +9,7 @@ import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.Query;
 
 import model.Crime;
+import model.Crimecategory;
 import model.Location;
 
 import org.springframework.stereotype.Component;
@@ -78,6 +79,16 @@ public class CrimesDAO {
 			return new Crime();
 		}
 		return resultList.get(resultList.size()-1);
+	}
+	
+	public List<Crimecategory> getCrimeCategorys(){
+		openConnection();
+		Query crimesQuery = em.createQuery("select c from Crimecategory c");
+
+		List<Crimecategory> crimecat=crimesQuery.getResultList();
+		
+		closeConnection();
+		return crimecat;
 	}
 
 

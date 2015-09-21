@@ -1,65 +1,44 @@
 package model;
 
+import java.io.Serializable;
+import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
+/**
+ * The persistent class for the CRIMES database table.
+ * 
+ */
 @Entity
-@Table(name = "CRIMES", schema = "STOCKHOLM")
-public class Crime {
-
+@Table(name="CRIMES", schema="STOCKHOLM")
+public class Crime implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private static final Date ERROR_DATE = new Date(0);
 
 	@Id
-	@GeneratedValue
-	private int ID;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int id;
 	private String location;
 
 	@Transient
 	private String date;
 	private String title;
 	private String description;
-	private String crimeCat;
-
+	
 	@Embedded
 	private Location geoLocation;
 	private Date dateStamp;
 
-	public String getCrimeCat() {
-		return crimeCat;
-	}
+	
 
-	public void setCrimeCat(String crimeCat) {
-		this.crimeCat = crimeCat;
-	}
-
-	public Location getGeoLocation() {
-		return geoLocation;
-	}
-
-	public void setGeoLocation(Location geoLocation) {
-		this.geoLocation = geoLocation;
-	}
+	//bi-directional many-to-one association to Crimecategory
+	@ManyToOne
+	@JoinColumn(name="CRIMECAT_ID")
+	private Crimecategory crimecategory;
 
 	public Crime() {
-	}
-
-	public int getID() {
-		return ID;
-	}
-	
-	@Override
-	public String toString() {
-		return "Crime [ID=" + ID + ", location=" + location + ", date=" + date + ", title=" + title
-				+ ", description=" + description + ", crimeCat=" + crimeCat + ", geoLocation="
-				+ geoLocation + ", dateStamp=" + dateStamp + "]";
 	}
 
 	public Crime(String title, String description) {
@@ -69,13 +48,59 @@ public class Crime {
 		createLocation();
 		createDate();
 	}
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getLocation() {
+		return this.location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Crimecategory getCrimecategory() {
+		return this.crimecategory;
+	}
+
+	public void setCrimecategory(Crimecategory crimecategory) {
+		this.crimecategory = crimecategory;
+	}
+	public String getCategory(){
+		int i = title.indexOf(",");
+		int j = title.lastIndexOf(",");
+		
+		return this.title.substring(i, j);
+	}
 
 	private void createLocation() {
 		int i = description.indexOf('.');
 		if (i == -1) {
-			i = description.length() - 1;
+			i = description.length()-1;
 		}
-
+		
 		this.location = this.description.substring(0, i) + ", Sweden";
 	}
 
@@ -96,23 +121,7 @@ public class Crime {
 			setDateStamp(ERROR_DATE);
 		}
 	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
+	
 	public Date getDateStamp() {
 		return dateStamp;
 	}
@@ -120,5 +129,13 @@ public class Crime {
 	public void setDateStamp(Date dateStamp) {
 		this.dateStamp = dateStamp;
 	}
+	
+	public Location getGeoLocation() {
+		return geoLocation;
+	}
 
+	public void setGeoLocation(Location geoLocation) {
+		this.geoLocation = geoLocation;
+	}
+	
 }
