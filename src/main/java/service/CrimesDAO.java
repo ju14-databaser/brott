@@ -68,5 +68,17 @@ public class CrimesDAO {
 
 	}
 
+	public Crime getLatestCrime() {
+		openConnection();
+		Query crimesQuery = em.createQuery("select c from Crime c order by c.title");
+		
+		List<Crime> resultList = crimesQuery.getResultList();
+		closeConnection();
+		if (resultList.isEmpty()) {
+			return new Crime();
+		}
+		return resultList.get(resultList.size()-1);
+	}
+
 
 }

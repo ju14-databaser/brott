@@ -25,6 +25,8 @@
 				</configuration>
 
 			</plugin>
+	<!-- <plugin> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-maven-plugin</artifactId> 
+		</plugin> -->
 		</plugins>
 	</build>
 	<dependencies>
@@ -112,6 +114,24 @@
 			<version>2.6.0</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<!-- 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>1.2.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+			<version>1.2.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-batch</artifactId>
+			<version>1.2.5.RELEASE</version>
+		</dependency>
+		 -->
 	</dependencies>
 	<packaging>war</packaging>
 

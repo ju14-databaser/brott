@@ -98,4 +98,34 @@ public class XMLParser {
 		documentBuilder.reset();
 		return crime;
 	}
+
+	public List<Crime> parseNewCrimes(String latestCrimeTitle) {
+		List<Crime> crimes = new ArrayList<>();
+		LOGGER.error("sista titeln är: "+ latestCrimeTitle);
+		try {
+			Document document = documentBuilder.parse(POLICE_RSS);
+			LOGGER.error("Börjar parsning...");
+			document.getDocumentElement().normalize();
+			NodeList items = document.getElementsByTagName("item");
+			for (int i = 0; i < items.getLength()-1; i++) {
+				Node item = items.item(i);
+				if (item.getNodeType() == Node.ELEMENT_NODE) {
+					Element itemE = (Element) item;
+					String title = getValue(itemE, "title");
+					String description = getValue(itemE, "description");
+					if (title.equals(latestCrimeTitle)) {
+						return crimes;
+					}
+					
+					crimes.add(new Crime(title, description));
+				}
+			}
+		} catch (SAXException e) {
+			LOGGER.error("SAXException at parsing of document..." + e.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("IOException at parsing of document..." + e.getMessage());
+		}
+
+		return crimes;
+	}
 }
