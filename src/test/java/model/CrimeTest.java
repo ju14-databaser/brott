@@ -13,7 +13,7 @@ public class CrimeTest {
 	private static final String DESC = "Sedelvägen, Tumba Barn krossat rutor på förskola.";
 
 	@Test
-	public void dateStampFormatIsSameDay() throws ParseException {
+	public void dateStampFormatParsedIsCorrectDay() throws ParseException {
 
 		Crime crime = new Crime(TITLE, DESC);
 		DateFormat dF = DateFormat.getDateInstance(DateFormat.SHORT);
@@ -22,4 +22,9 @@ public class CrimeTest {
 		Assert.assertEquals(date, crime.getDateStamp());
 	}
 
+	@Test
+	public void locationStringGetsCorrectPartOfDesriptionString(){
+		//TODO: lägg till relevant test
+	}
+	
 }
