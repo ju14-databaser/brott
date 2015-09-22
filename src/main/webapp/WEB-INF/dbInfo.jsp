@@ -6,10 +6,59 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Databasens innehåll</title>
 </head>
-<body>
-	<h1>Statistik och funktioner för databasen</h1>
 
-	<h2>Statistik</h2>
+<style type="text/css">
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	background-color: #539ADF;
+	color: white;
+	padding: 0px;
+	height: 100%;
+}
+
+#header {
+	height: 70px;
+	margin: 0px auto;
+	background-color: #FFFFFF;
+	color: #2879b3;
+	padding-left: 35%;
+	padding-top: 1%;
+}
+
+.consolas {
+	margin: 0px auto;
+	font-size: 2.5em;
+	font-family: "Consolas";
+	display: inline;
+}
+
+.stencil {
+	margin: 0px auto;
+	font-size: 3.5em;
+	font-family: "Stencil";
+	display: inline;
+}
+
+#dbinfo {
+	padding-left: 20%;
+	color: white;
+	padding-left: 30%;
+	padding-top: 5%;
+}
+
+</style>
+
+<body>
+
+		<div id="header">
+			<h1 class=stencil>BROTT  </h1>
+			<h1 class=consolas> i Stockholm</h1>
+		</div>
+
+	<div id=dbinfo>
+	<h2>Statistik och funktioner för databasen</h2>
+
+	<h3>Statistik</h3>
 	<table>
 
 		<tr>
@@ -23,7 +72,7 @@
 		</tr>
 
 	</table>
-	<h2>Funktioner</h2>
+	<h3>Funktioner</h3>
 
 	<table>
 		<tr>
@@ -45,6 +94,7 @@
 		</tr>
 	</table>
 	Antal uppdaterade rader: ${updated }
+	</div>
 
 </body>
 </html>
