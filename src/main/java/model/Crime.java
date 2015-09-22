@@ -43,8 +43,8 @@ public class Crime implements Serializable {
 
 	public Crime(String title, String description) {
 
-		this.title = title.replace("\r", "").replace("\n", "");
-		this.description = description.replace("\r", "").replace("\n", "");
+		this.title = title.replace("\r", "").replace("\n", "").trim();
+		this.description = description.replace("\r", "").replace("\n", "").trim();
 		createLocation();
 		createDate();
 	}

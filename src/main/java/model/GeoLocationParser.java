@@ -1,5 +1,7 @@
 package model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -13,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 public class GeoLocationParser {
 
 	private static final String HTTPS_GOOGLEAPIS_ADDRESS = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoLocationParser.class);
 
 	/**
 	 * @param location
@@ -27,17 +30,20 @@ public class GeoLocationParser {
 		try {
 			ResponseEntity<AddressWrapper> entity = restTemplate.getForEntity(stringToReadURLFrom,
 					AddressWrapper.class);
-			Location location2 = entity.getBody().getResults()[0].getGeometry().getLocation();
+			AdressResultsWrapper[] results = entity.getBody().getResults();
+			if (results.length == 0) {
+				LOGGER.error("No geolocation found for the location in Google. Returning null.");
+				return null;
+			}
+			Location location2 = results[0].getGeometry().getLocation();
 			return location2;
 		} catch (RestClientException re) {
-//			System.out.println("PROBLEM med Rest: " + re.getMessage());
+			LOGGER.error("Problems with the rest service for getting geolocation as JSON data. "
+					+ re.getMessage());
 			return null;
-		} 
-		catch (Exception e) {
-			// TODO: bra errorhandling
-			System.out.println("PROBLEM i geolocation, EJ REST: " + location);
-//			System.out.println("ERROR: " + e.getMessage() + " " + e.getLocalizedMessage() + " "
-//					+ e.toString());
+		} catch (Exception e) {
+			LOGGER.error("Problems getting geolocation as JSON data. Not related to Rest "
+					+ e.getMessage());
 			return null;
 		}
 	}

@@ -10,122 +10,148 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-@Component
+/**
+ * Class for parsing the Police RSS feed into Crime Objects
+ * 
+ * @author Erik, Lina
+ *
+ */
 public class XMLParser {
 
-	private final static String POLICE_RSS = "https://polisen.se/Aktuellt/RSS/Lokal-RSS---Handelser/Lokala-RSS-listor1/Handelser-RSS---Stockholms-lan/?feed=rss";
-	private final static String DALARNA_RSS = "https://polisen.se/Stockholms_lan/Aktuellt/RSS/Lokal-RSS---Handelser/Lokala-RSS-listor1/Handelser-RSS---Dalarna/?feed=rss";
+//	private final static String POLICE_RSS = "https://polisen.se/Aktuellt/RSS/Lokal-RSS---Handelser/Lokala-RSS-listor1/Handelser-RSS---Stockholms-lan/?feed=rss";
 	private DocumentBuilderFactory documentBuilderFactory;
 	private DocumentBuilder documentBuilder;
 	private static final Logger LOGGER = LoggerFactory.getLogger(XMLParser.class);
+	private String rssFeedSource;
 
-	public XMLParser() {
+	// TODO: Do we need to have a constructor here or can the methods be static
+	// instead?
+
+//	// TODO: remove POLICE_RSS when Erik has commited CrimeHandler
+//	public XMLParser() {
+//		rssFeedSource = POLICE_RSS;
+//		documentBuilderFactory = DocumentBuilderFactory.newInstance();
+//		try {
+//			documentBuilder = documentBuilderFactory.newDocumentBuilder();
+//		} catch (ParserConfigurationException e) {
+//			LOGGER.error("Error when creating the DocumentBuilder in the XMLParser");
+//		}
+//	}
+
+	/**
+	 * Constructor where the RSS feed is sent in. 
+	 * @param rssFeed
+	 */
+	public XMLParser(String rssFeed) {
+		rssFeedSource = rssFeed;
 		documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		try {
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-
+			LOGGER.error("Error when creating the DocumentBuilder in the XMLParser");
 		}
 	}
 
-	public String getValue(Element parent, String nodeName) {
-		return parent.getElementsByTagName(nodeName).item(0).getFirstChild().getNodeValue();
-	}
+	/**
+	 * Method for getting all crimes from the police rss feed.
+	 * 
+	 * @return a list of Crimes
+	 * @throws IOException
+	 *             if there was problems connecting to the rss feed.
+	 * @throws SAXException
+	 *             if the RSS source has incorrect formatting
+	 */
+	public List<Crime> parseAllCrimes() throws IOException, SAXException {
 
-	public List<Crime> parseAllCrimes() {
 		List<Crime> crimes = new ArrayList<>();
 
 		try {
-			Document document = documentBuilder.parse(POLICE_RSS);
-			LOGGER.error("Börjar parsning...");
-			document.getDocumentElement().normalize();
-			NodeList items = document.getElementsByTagName("item");
-			for (int i = 0; i < items.getLength()-1; i++) {
+			NodeList items = parsedRSSAsAList();
+			for (int i = 0; i < items.getLength(); i++) {
+
 				Node item = items.item(i);
 				if (item.getNodeType() == Node.ELEMENT_NODE) {
 					Element itemE = (Element) item;
-					String title = getValue(itemE, "title");
-					String description = getValue(itemE, "description");
+					String title = getValueFromNode(itemE, "title");
+					String description = getValueFromNode(itemE, "description");
 					crimes.add(new Crime(title, description));
 				}
+
 			}
+
 		} catch (SAXException e) {
-			LOGGER.error("SAXException at parsing of document..." + e.getMessage());
+			LOGGER.error("SAXException at parsing of document in XMLParser. " + e.getMessage());
+			throw e;
 		} catch (IOException e) {
-			LOGGER.error("IOException at parsing of document..." + e.getMessage());
+			LOGGER.error("IOException at parsing of document in XMLParser. " + e.getMessage());
+			throw e;
 		}
 
 		return crimes;
 	}
 
-	public Crime parseTOCrime(String xml) {
-		String title = "";
-		String description = "";
-		boolean error = false;
-		try {
-			Document document = documentBuilder.parse(POLICE_RSS);
-			LOGGER.error("Börjar parsning...");
-			document.getDocumentElement().normalize();
-			NodeList items = document.getElementsByTagName("item");
-			for (int i = 0; i < 1; i++) {
-				Node item = items.item(i);
-				if (item.getNodeType() == Node.ELEMENT_NODE) {
-					Element itemE = (Element) item;
-					title = getValue(itemE, "title");
-					description = getValue(itemE, "description");
-				}
-			}
-		} catch (SAXException e) {
-			LOGGER.error("SAXException at parsing of document..." + e.getMessage());
-			error = true;
-		} catch (IOException e) {
-			LOGGER.error("IOException at parsing of document..." + e.getMessage());
-			error = true;
-		}
-		if (error) {
-			// TODO: errorhandling to avoid further errors in the Crime creation
-		}
-		Crime crime = new Crime(title, description);
-
-		documentBuilder.reset();
-		return crime;
-	}
-
-	public List<Crime> parseNewCrimes(String latestCrimeTitle) {
+	/**
+	 * Method for getting all crimes that do not exist in the current database
+	 * from the Police Rss.
+	 * 
+	 * @param latestCrimeTitle
+	 *            the title of the latest crime existing in the Database
+	 * @return a list of all new Crimes
+	 * @throws SAXException
+	 *             if the RSS source has incorrect formatting
+	 * @throws IOException
+	 *             if there was problems connecting to the rss feed.
+	 */
+	public List<Crime> parseNewCrimes(String latestCrimeTitle) throws SAXException, IOException {
 		List<Crime> crimes = new ArrayList<>();
-		LOGGER.error("sista titeln är: "+ latestCrimeTitle);
+
 		try {
-			Document document = documentBuilder.parse(POLICE_RSS);
-			LOGGER.error("Börjar parsning...");
-			document.getDocumentElement().normalize();
-			NodeList items = document.getElementsByTagName("item");
-			for (int i = 0; i < items.getLength()-1; i++) {
+			NodeList items = parsedRSSAsAList();
+
+			for (int i = 0; i < items.getLength(); i++) {
+
 				Node item = items.item(i);
 				if (item.getNodeType() == Node.ELEMENT_NODE) {
 					Element itemE = (Element) item;
-					String title = getValue(itemE, "title");
-					String description = getValue(itemE, "description");
+					String title = getValueFromNode(itemE, "title");
+					String description = getValueFromNode(itemE, "description");
 					if (title.equals(latestCrimeTitle)) {
 						return crimes;
 					}
-					
+
 					crimes.add(new Crime(title, description));
 				}
 			}
+
 		} catch (SAXException e) {
-			LOGGER.error("SAXException at parsing of document..." + e.getMessage());
+			LOGGER.error("SAXException at parsing of document in XMLParser. " + e.getMessage());
+			throw e;
 		} catch (IOException e) {
-			LOGGER.error("IOException at parsing of document..." + e.getMessage());
+			LOGGER.error("IOException at parsing of document in XMLParser. " + e.getMessage());
+			throw e;
 		}
 
 		return crimes;
 	}
+
+	private NodeList parsedRSSAsAList() throws SAXException, IOException {
+		LOGGER.debug("Skapar dokument för att parsa RSS");
+		Document document = documentBuilder.parse(rssFeedSource);
+		LOGGER.debug("Klar med att skapa dokument med parsad RSS");
+		document.getDocumentElement().normalize();
+		NodeList items = document.getElementsByTagName("item");
+
+		return items;
+	}
+
+	private String getValueFromNode(Element parent, String nodeName) {
+		return parent.getElementsByTagName(nodeName).item(0).getFirstChild().getNodeValue();
+	}
+
 }

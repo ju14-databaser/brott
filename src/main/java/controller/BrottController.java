@@ -7,60 +7,45 @@ import javax.inject.Inject;
 import model.Crime;
 import model.CrimeHandler;
 
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import service.CrimesDAO;
-
 @Controller
-@EnableScheduling
 public class BrottController {
 
 	private CrimeHandler crimeHandler;
-	private CrimesDAO crimesDAO;
 
 	@Inject
-	public BrottController(CrimeHandler crimeHandler, CrimesDAO crimesDAO) {
+	public BrottController(CrimeHandler crimeHandler) {
 		this.crimeHandler = crimeHandler;
-		this.crimesDAO = crimesDAO;
 
 	}
 
 	@RequestMapping("/Brott")
 	public String getCrime(Model model) {
 
-		List<Crime> allCrimes = crimesDAO.getAllCrimes();
+		List<Crime> allCrimes = crimeHandler.getAllCrimesFromDB();
 
 		model.addAttribute("Crimes", allCrimes);
 		return "index";
 	}
-	
+
 	@RequestMapping("/New")
 	public String loadDatabaseWithNewCrimes(Model model) {
 		List<Crime> allCrimesFromPolice = crimeHandler.getNewCrimesFromPolice();
-		allCrimesFromPolice.forEach(crime -> {
-			crimesDAO.openConnection();
-			crimesDAO.addCrime(crime);
-			crimesDAO.closeConnection();
-		});
+		crimeHandler.writeCrimesToDB(allCrimesFromPolice);
 
 		model.addAttribute("crimeNo", allCrimesFromPolice.size());
 		model.addAttribute("crimes", allCrimesFromPolice);
 		return "allCrimes";
 	}
-	
 
 	@RequestMapping("/load")
-	// TODO: Kolla spring-batch eller liknande om man vill schemalägga
 	public String loadDatabaseWithAllCrimes(Model model) {
 		List<Crime> allCrimesFromPolice = crimeHandler.getAllCrimesFromPolice();
-		allCrimesFromPolice.forEach(crime -> {
-			crimesDAO.openConnection();
-			crimesDAO.addCrime(crime);
-			crimesDAO.closeConnection();
-		});
+		crimeHandler.writeCrimesToDB(allCrimesFromPolice);
 
 		model.addAttribute("crimeNo", allCrimesFromPolice.size());
 		model.addAttribute("crimes", allCrimesFromPolice);
@@ -76,7 +61,7 @@ public class BrottController {
 
 	@RequestMapping("/statistik")
 	public String showDBStatistics(Model model) {
-		List<Crime> allCrimes = crimesDAO.getAllCrimes();
+		List<Crime> allCrimes = crimeHandler.getAllCrimesFromDB();
 
 		model.addAttribute("noRows", allCrimes.size());
 
@@ -93,4 +78,9 @@ public class BrottController {
 		return "dbInfo";
 	}
 
+	@ExceptionHandler(RuntimeException.class)
+	public String databaseConnectionError(){
+		return "dbError";
+	}
+	
 }

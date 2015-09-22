@@ -1,20 +1,26 @@
 package model;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.xml.sax.SAXException;
 
 import service.CrimesDAO;
 
 @Component
+@EnableScheduling
 public class CrimeHandler {
 
+	private final static String POLICE_RSS = "https://polisen.se/Aktuellt/RSS/Lokal-RSS---Handelser/Lokala-RSS-listor1/Handelser-RSS---Stockholms-lan/?feed=rss";
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrimeHandler.class);
 	private GeoLocationParser geoLocationParser;
 	private CrimesDAO crimesDAO;
@@ -28,10 +34,19 @@ public class CrimeHandler {
 		geoLocationParser = new GeoLocationParser();
 	}
 
+	//TODO: Går det att avbryta om det tar för lång tid?
 	public List<Crime> getNewCrimesFromPolice() {
-		XMLParser xmlParser = new XMLParser();
-
-		Crime latestCrime = crimesDAO.getLatestCrime();
+		XMLParser xmlParser = new XMLParser(POLICE_RSS);
+		Crime latestCrime;
+		try {
+			latestCrime = crimesDAO.getLatestCrime();
+		} catch (PersistenceException e) {
+			LOGGER.error("Error when connecting to the database for getting new crimes. "
+					+ e.getMessage());
+			throw new RuntimeException(
+					"Error when connecting to the database for getting new crimes. "
+							+ e.getMessage());
+		}
 
 		if (latestCrime.getTitle() == null) {
 			return getAllCrimesFromPolice();
@@ -39,7 +54,18 @@ public class CrimeHandler {
 
 		String latestCrimeTitle = latestCrime.getTitle();
 
-		List<Crime> newCrimes = xmlParser.parseNewCrimes(latestCrimeTitle);
+		List<Crime> newCrimes;
+		try {
+			newCrimes = xmlParser.parseNewCrimes(latestCrimeTitle);
+		}catch (SAXException e) {
+			LOGGER.error("Error in parsing the RSS feed from the Police_RSS. " + e.getMessage());
+			newCrimes = new ArrayList<>();
+			return newCrimes;
+		} catch (IOException e) {
+			LOGGER.error("Connection error when trying to access the Police rss feed. " + e.getMessage());
+			newCrimes = new ArrayList<>();
+			return newCrimes;
+		}
 		// TODO: add geolocation
 		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
 		newCrimes=setCrimeCategory(newCrimes, crimeCat);
@@ -47,22 +73,42 @@ public class CrimeHandler {
 
 	}
 
-
 	// @Scheduled(fixedDelay=600000)
 	public void getAllCrimesFromPoliceScheduled() {
 		List<Crime> allCrimesFromPolice = getAllCrimesFromPolice();
 
 		if (allCrimesFromPolice.size() > 0) {
-			LOGGER.error("LYCKADES UPPDATERA");
+			LOGGER.debug("LYCKADES UPPDATERA");
 		} else {
 			LOGGER.error("MISSLYCKADES MED ATT HÄMTA");
 		}
 	}
 
-	public List<Crime> getAllCrimesFromPolice() {
-		XMLParser xmlParser = new XMLParser();
+	public void writeCrimesToDB(List<Crime> crimesToAdd) {
+		crimesDAO.openConnection();
+		crimesToAdd.forEach(crime -> {
+			crimesDAO.addCrime(crime);
+		});
+		crimesDAO.closeConnection();
+	}
 
-		List<Crime> crimes = xmlParser.parseAllCrimes();
+	public List<Crime> getAllCrimesFromPolice() {
+		XMLParser xmlParser = new XMLParser(POLICE_RSS);
+
+		List<Crime> crimes;
+		try {
+			crimes = xmlParser.parseAllCrimes();
+		} catch (SAXException e) {
+			LOGGER.error("Error in parsing the RSS feed from the Police_RSS. " + e.getMessage());
+			crimes = new ArrayList<>();
+			return crimes;
+		} catch (IOException e) {
+			LOGGER.error("Connection error when trying to access the Police rss feed. " + e.getMessage());
+			crimes = new ArrayList<>();
+			return crimes;
+			//TODO: Är detta vad vi vill göra? Hur vill vi hantera det för användaren här?
+		}
+
 		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
 		if (crimes.size() > 0) {
 
@@ -114,15 +160,30 @@ public class CrimeHandler {
 
 	@Scheduled(fixedDelay = 300000)
 	public void updateGeoLocationsScheduled() {
-		updateGeoLocations();
-
+		LOGGER.debug("Starting scheduled job for updating geolocations in database.");
+		int noUpdated = 0;
+		try {
+			noUpdated = updateGeoLocations();
+		} catch (PersistenceException e) {
+			LOGGER.error("Error when connecting to the database for scheduled job for updating geolocations. "
+					+ e.getMessage());
+		}
+		LOGGER.debug("Finished scheduled job for updating geolocations in database. Updated "
+				+ noUpdated + " geolocations");
 	}
 
 	public int updateGeoLocations() {
 		int updated = 0;
-		LOGGER.error("Nu ska här uppdateras GEOLOCATIONS!");
 		List<Crime> allCrimes = crimesDAO.getAllCrimes();
-		crimesDAO.openConnection();
+		try {
+			crimesDAO.openConnection();
+		} catch (PersistenceException e) {
+			LOGGER.error("Error when connecting to the database for updating geolocations. "
+					+ e.getMessage());
+			throw new RuntimeException(
+					"Error when connecting to the database for updating geolocations. "
+							+ e.getMessage());
+		}
 
 		for (Crime crime : allCrimes) {
 
@@ -146,6 +207,21 @@ public class CrimeHandler {
 		}
 		crimesDAO.closeConnection();
 		return updated;
+	}
+
+	public List<Crime> getAllCrimesFromDB() {
+
+		List<Crime> allCrimes;
+		try {
+			allCrimes = crimesDAO.getAllCrimes();
+		} catch (PersistenceException e) {
+			LOGGER.error("Error when connecting to the database for getting new crimes. "
+					+ e.getMessage());
+			throw new RuntimeException(
+					"Error when connecting to the database for getting new crimes. "
+							+ e.getMessage());
+		}
+		return allCrimes;
 	}
 
 }
