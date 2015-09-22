@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
@@ -31,30 +32,21 @@ public class CrimeHandler {
 		XMLParser xmlParser = new XMLParser();
 
 		Crime latestCrime = crimesDAO.getLatestCrime();
-		
+
 		if (latestCrime.getTitle() == null) {
 			return getAllCrimesFromPolice();
 		}
-		
+
 		String latestCrimeTitle = latestCrime.getTitle();
 
 		List<Crime> newCrimes = xmlParser.parseNewCrimes(latestCrimeTitle);
 		// TODO: add geolocation
+		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
+		newCrimes=setCrimeCategory(newCrimes, crimeCat);
 		return newCrimes;
 
 	}
 
-	public Crime getLatestCrimeFromPolice() {
-
-		String xml = getXMLCrime();
-		XMLParser xmlParser = new XMLParser();
-
-		Crime crime = xmlParser.parseTOCrime(xml);
-		crime.setGeoLocation(geoLocationParser.getGeoLocation(crime.getLocation()));
-
-		return crime;
-
-	}
 
 	// @Scheduled(fixedDelay=600000)
 	public void getAllCrimesFromPoliceScheduled() {
@@ -71,9 +63,51 @@ public class CrimeHandler {
 		XMLParser xmlParser = new XMLParser();
 
 		List<Crime> crimes = xmlParser.parseAllCrimes();
+		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
 		if (crimes.size() > 0) {
-			crimes.forEach(crime -> crime.setGeoLocation(geoLocationParser.getGeoLocation(crime
-					.getLocation())));
+
+			crimes = setCrimeCategory(crimes, crimeCat);
+
+		}
+		return crimes;
+	}
+
+	/**
+	 * Method that tries to find the category of the crime by searching through the crimecategory table.
+	 * If no category was found, it sets it to "Övrigt" 
+	 * 
+	 * @param crimes	list of crimes
+	 * @param crimeCat	all categorys
+	 * @return list of crimes with categorys
+	 */
+	public List<Crime> setCrimeCategory(List<Crime> crimes, List<Crimecategory> crimeCat) {
+		// Förbereder ett Crimecategory med "Övrigt" som categori
+		Crimecategory notFound = null;
+		for (Crimecategory cat : crimeCat) {
+			if (cat.getCategory().equalsIgnoreCase("Övrigt")) {
+				notFound = cat;
+			}
+		}
+		boolean foundCat;
+		for(Crime crime: crimes){
+			foundCat = false;
+			
+			crime.setGeoLocation(geoLocationParser.getGeoLocation(crime.getLocation()));
+
+			for (int i = 0; i < crimeCat.size(); i++) {
+
+				if (crime.getCategory().toLowerCase().contains(crimeCat.get(i).getCategory().toLowerCase())) {
+					crime.setCrimecategory(crimeCat.get(i));
+					foundCat = true;
+					break;
+				}
+			}
+			
+			if (foundCat==false) {
+				crime.setCrimecategory(notFound);
+			}
+			
+
 		}
 		return crimes;
 	}
@@ -112,10 +146,6 @@ public class CrimeHandler {
 		}
 		crimesDAO.closeConnection();
 		return updated;
-	}
-
-	private String getXMLCrime() {
-		return null;
 	}
 
 }
