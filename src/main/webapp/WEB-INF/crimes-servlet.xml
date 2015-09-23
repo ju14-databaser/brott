@@ -7,6 +7,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
 	<mvc:annotation-driven />
+	<mvc:resources location="/resourses/" mapping="/static"></mvc:resources>
 	<context:component-scan base-package="model" />
 	<context:component-scan base-package="controller" />
 	<context:component-scan base-package="service" />
@@ -16,6 +17,5 @@
 		<property name="prefix" value="/WEB-INF/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-
 
 </beans>
