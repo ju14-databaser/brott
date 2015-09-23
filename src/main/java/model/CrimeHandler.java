@@ -223,5 +223,19 @@ public class CrimeHandler {
 		}
 		return allCrimes;
 	}
+	
+	public List<Crimecategory> getAllCategorysFromDB(){
+		List<Crimecategory> crimecat;
+		try {
+		crimecat=crimesDAO.getCrimeCategorys();
+		}catch(PersistenceException e){
+			LOGGER.error("Error when connecting to the database for getting all categorys. "
+					+ e.getMessage());
+			throw new RuntimeException(
+					"Error when connecting to the database for getting all categorys. "
+					+ e.getMessage());
+		}
+		return crimecat;
+	}
 
 }

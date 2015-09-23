@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import model.Crime;
 import model.CrimeHandler;
+import model.Crimecategory;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +26,10 @@ public class BrottController {
 
 	@RequestMapping("/Brott")
 	public String getCrime(Model model) {
-
 		List<Crime> allCrimes = crimeHandler.getAllCrimesFromDB();
-
+		List<Crimecategory> crimecat= crimeHandler.getAllCategorysFromDB();
+		
+		model.addAttribute("Crimecat", crimecat);
 		model.addAttribute("Crimes", allCrimes);
 		return "index";
 	}
