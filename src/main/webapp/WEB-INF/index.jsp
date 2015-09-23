@@ -7,44 +7,50 @@
 
 <link href="/css/resetcss.css" rel="stylesheet" type="text/css">
 <link href="/css/style.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>BROTT i Stockholm</title>
 
 <style type="text/css">
-
 body {
 	font-family: Verdana, Geneva, sans-serif;
 	background-color: #539ADF;
 	padding: 0px;
 	height: 100%;
 }
+
 #header {
 	height: 70px;
 	margin: 0px auto;
 	background-color: #FFFFFF;
 	color: #2879b3;
 	padding-left: 35%;
-	padding-top:1%;
+	padding-top: 1%;
 }
+
 #context {
 	margin: 0px auto;
-	margin-top: 10px;
+	margin-top: 2%;
 	margin-bottom: 10px;
-	margin-left:15%;
+	margin-left: 15%;
 }
- .consolas{
+
+.consolas {
 	margin: 0px auto;
 	font-size: 2.5em;
 	font-family: "Consolas";
 	display: inline;
 }
 
- .stencil{
+.stencil {
 	margin: 0px auto;
 	font-size: 3.5em;
 	font-family: "Stencil";
@@ -54,38 +60,37 @@ body {
 #map {
 	width: 80%;
 	height: 400px;
-}
-
-#link {
-	margin: 0px auto;
-	padding-left: 45%;
-	font-size: 1,5em;
+	margin-top: 2%;
 }
 
 p {
-	color:white;
+	color: white;
 	padding-left: 15%;
 }
+
 #buttons {
-	display:inline;
+	display: inline;
 }
-ul{background-color:#fff;}
-li:hover
-{
-    background-color:#A0B7FF;
+
+ul {
+	background-color: #fff;
 }
-li{
+
+li:hover {
+	background-color: #A0B7FF;
+}
+
+li {
 	border-style: solid;
-    border-width: 1px;
-    border-color:#D2D7D9;
-
+	border-width: 1px;
+	border-color: #D2D7D9;
 }
+
 .scrollable-menu {
-    height: auto;
-    max-height: 200px;
-    overflow-x: hidden;
+	height: auto;
+	max-height: 200px;
+	overflow-x: hidden;
 }
-
 </style>
 
 <script>
@@ -177,38 +182,33 @@ li{
 </head>
 <body onload="initialize()">
 
-<div id="header">
-	<h1 class=stencil>BROTT  </h1>
-	<h1 class=consolas> i Stockholm</h1>
-</div>
-		
-<p>Här kan du se brott som begåtts i Stockholm. Hoovra över röda markeringarna eller zooma in för en närmare titt! </p>
-<div id="context">		
-	<div id="map"></div>
-	
-	
-		
-	<div id="buttons" class="dropdown" style="width:30%;">
-	 	 <button  class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filtrera
-			  <span class="caret"></span>
-		</button>
-			  
-			  <ul id="myid" class="dropdown-menu scrollable-menu" role="menu">
-			  		<c:forEach items="${Crimecat}" var="cat">
-					
-						<li id="index">${cat.category}</li>
-				
-					</c:forEach>
-			  
-			  </ul>
-	<button class="btn btn-primary" type="button" onClick="showAllMarkers()">Visa alla brott
-			
-	</button>			  
+	<div id="header">
+		<h1 class=stencil>BROTT</h1>
+		<h1 class=consolas>i Stockholm</h1>
 	</div>
- 	 
-</div>
-		
-	
+
+	<div id="context">
+
+		<div id="buttons" class="dropdown" style="width: 30%;">
+			<button class="btn btn-primary" type="button"
+				onClick="showAllMarkers()">Visa alla brott</button>
+			<button class="btn btn-primary dropdown-toggle" type="button"
+				data-toggle="dropdown">
+				Filtrera <span class="caret"></span>
+			</button>
+			<ul id="myid" class="dropdown-menu scrollable-menu" role="menu">
+				<c:forEach items="${Crimecat}" var="cat">
+					<li id="index">${cat.category}</li>
+				</c:forEach>
+			</ul>
+
+			<div id="map"></div>
+		</div>
+
+	</div>
+
+	<p>Här kan du se brott som begåtts i Stockholm. Hoovra över röda
+		markeringarna eller zooma in för en närmare titt!</p>
 
 </body>
 </html>
