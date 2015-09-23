@@ -1,8 +1,11 @@
 package model;
 
-
 public class CrimeHandlerTest {
 
-	//TODO: Kom på vad vi vill testa i denna klass - OM vi vill testa något här. Integration?
+	// TODO: Kör ett integrationstest - läs in en xml fil via parser och
+	// kontrollera att innehållet hamnar i en databas (helst en embedded db
+	// enbart för test)
+
+	//TODO: test på vilka kategorier som ett Crime får
 	
 }

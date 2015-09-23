@@ -82,7 +82,7 @@ public class BrottController {
 
 	@ExceptionHandler(RuntimeException.class)
 	public String databaseConnectionError(){
-		return "dbError";
+		return "error";
 	}
 	
 }

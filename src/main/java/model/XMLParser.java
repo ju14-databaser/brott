@@ -24,28 +24,17 @@ import org.xml.sax.SAXException;
  */
 public class XMLParser {
 
-//	private final static String POLICE_RSS = "https://polisen.se/Aktuellt/RSS/Lokal-RSS---Handelser/Lokala-RSS-listor1/Handelser-RSS---Stockholms-lan/?feed=rss";
 	private DocumentBuilderFactory documentBuilderFactory;
 	private DocumentBuilder documentBuilder;
 	private static final Logger LOGGER = LoggerFactory.getLogger(XMLParser.class);
 	private String rssFeedSource;
 
 	// TODO: Do we need to have a constructor here or can the methods be static
-	// instead?
-
-//	// TODO: remove POLICE_RSS when Erik has commited CrimeHandler
-//	public XMLParser() {
-//		rssFeedSource = POLICE_RSS;
-//		documentBuilderFactory = DocumentBuilderFactory.newInstance();
-//		try {
-//			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-//		} catch (ParserConfigurationException e) {
-//			LOGGER.error("Error when creating the DocumentBuilder in the XMLParser");
-//		}
-//	}
-
+	// instead?	
+	
 	/**
-	 * Constructor where the RSS feed is sent in. 
+	 * Constructor where the RSS feed is sent in.
+	 * 
 	 * @param rssFeed
 	 */
 	public XMLParser(String rssFeed) {

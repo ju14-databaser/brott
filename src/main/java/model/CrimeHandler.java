@@ -34,7 +34,7 @@ public class CrimeHandler {
 		geoLocationParser = new GeoLocationParser();
 	}
 
-	//TODO: Går det att avbryta om det tar för lång tid?
+	// TODO: Går det att avbryta om det tar för lång tid?
 	public List<Crime> getNewCrimesFromPolice() {
 		XMLParser xmlParser = new XMLParser(POLICE_RSS);
 		Crime latestCrime;
@@ -57,18 +57,19 @@ public class CrimeHandler {
 		List<Crime> newCrimes;
 		try {
 			newCrimes = xmlParser.parseNewCrimes(latestCrimeTitle);
-		}catch (SAXException e) {
+		} catch (SAXException e) {
 			LOGGER.error("Error in parsing the RSS feed from the Police_RSS. " + e.getMessage());
 			newCrimes = new ArrayList<>();
 			return newCrimes;
 		} catch (IOException e) {
-			LOGGER.error("Connection error when trying to access the Police rss feed. " + e.getMessage());
+			LOGGER.error("Connection error when trying to access the Police rss feed. "
+					+ e.getMessage());
 			newCrimes = new ArrayList<>();
 			return newCrimes;
 		}
 		// TODO: add geolocation
 		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
-		newCrimes=setCrimeCategory(newCrimes, crimeCat);
+		newCrimes = setCrimeCategory(newCrimes, crimeCat);
 		return newCrimes;
 
 	}
@@ -99,14 +100,15 @@ public class CrimeHandler {
 		try {
 			crimes = xmlParser.parseAllCrimes();
 		} catch (SAXException e) {
-			LOGGER.error("Error in parsing the RSS feed from the Police_RSS. " + e.getMessage());
+			LOGGER.error("Error in parsing the RSS feed from the Police_RSS. " + e.getMessage(), e);
 			crimes = new ArrayList<>();
 			return crimes;
 		} catch (IOException e) {
-			LOGGER.error("Connection error when trying to access the Police rss feed. " + e.getMessage());
+			LOGGER.error(
+					"Connection error when trying to access the Police rss feed. " + e.getMessage(),
+					e);
 			crimes = new ArrayList<>();
 			return crimes;
-			//TODO: Är detta vad vi vill göra? Hur vill vi hantera det för användaren här?
 		}
 
 		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
@@ -119,11 +121,13 @@ public class CrimeHandler {
 	}
 
 	/**
-	 * Method that tries to find the category of the crime by searching through the crimecategory table.
-	 * If no category was found, it sets it to "Övrigt" 
+	 * Method that tries to find the category of the crime by searching through
+	 * the crimecategory table. If no category was found, it sets it to "Övrigt"
 	 * 
-	 * @param crimes	list of crimes
-	 * @param crimeCat	all categorys
+	 * @param crimes
+	 *            list of crimes
+	 * @param crimeCat
+	 *            all categorys
 	 * @return list of crimes with categorys
 	 */
 	public List<Crime> setCrimeCategory(List<Crime> crimes, List<Crimecategory> crimeCat) {
@@ -135,38 +139,39 @@ public class CrimeHandler {
 			}
 		}
 		boolean foundCat;
-		for(Crime crime: crimes){
+		for (Crime crime : crimes) {
 			foundCat = false;
-			
+
 			crime.setGeoLocation(geoLocationParser.getGeoLocation(crime.getLocation()));
 
 			for (int i = 0; i < crimeCat.size(); i++) {
 
-				if (crime.getCategory().toLowerCase().contains(crimeCat.get(i).getCategory().toLowerCase())) {
+				if (crime.getCategory().toLowerCase()
+						.contains(crimeCat.get(i).getCategory().toLowerCase())) {
 					crime.setCrimecategory(crimeCat.get(i));
 					foundCat = true;
 					break;
 				}
 			}
-			
-			if (foundCat==false) {
+
+			if (foundCat == false) {
 				crime.setCrimecategory(notFound);
 			}
-			
 
 		}
 		return crimes;
 	}
 
-	@Scheduled(fixedDelay = 300000)
+	@Scheduled(fixedDelay = 300000, initialDelay = 300000)
 	public void updateGeoLocationsScheduled() {
 		LOGGER.debug("Starting scheduled job for updating geolocations in database.");
 		int noUpdated = 0;
 		try {
 			noUpdated = updateGeoLocations();
-		} catch (PersistenceException e) {
-			LOGGER.error("Error when connecting to the database for scheduled job for updating geolocations. "
-					+ e.getMessage());
+		} catch (RuntimeException e) {
+			LOGGER.error(
+					"Error when connecting to the database for scheduled job for updating geolocations. "
+							+ e.getMessage(), e);
 		}
 		LOGGER.debug("Finished scheduled job for updating geolocations in database. Updated "
 				+ noUpdated + " geolocations");
@@ -182,7 +187,7 @@ public class CrimeHandler {
 					+ e.getMessage());
 			throw new RuntimeException(
 					"Error when connecting to the database for updating geolocations. "
-							+ e.getMessage());
+							+ e.getMessage(), e);
 		}
 
 		for (Crime crime : allCrimes) {

@@ -9,6 +9,11 @@
 	<task:annotation-driven />
 	<bean name="Controller" class="controller.BrottController" />
 	<bean name="CrimeHandler" class="model.CrimeHandler" />
-	<bean name="CrimesDAO" class="service.CrimesDAO" />
+	<bean name="CrimesDAO" class="service.CrimesDAO">
+		<property name="persistenceUnitName" ref="persistenceUnit"/>
+	</bean>
+	<bean name="persistenceUnit" class="java.lang.String">
+		<constructor-arg value='Crimes'></constructor-arg>
+	</bean>
 
 </beans>

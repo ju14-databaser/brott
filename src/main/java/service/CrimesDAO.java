@@ -25,14 +25,21 @@ public class CrimesDAO {
 	private EntityManager em;
 	private PersistenceUnitUtil util;
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrimesDAO.class);
+	private String persistenceUnitName;
 
 	public CrimesDAO() {
+		persistenceUnitName = PERSISTENCE_UNIT_NAME;
+	}
+
+	public CrimesDAO(String persistenceUnitName) {
+		this.persistenceUnitName = persistenceUnitName;
+
 	}
 
 	public void openConnection() throws PersistenceException {
 		LOGGER.debug("starting to open connection to DB");
 		try {
-			factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+			factory = Persistence.createEntityManagerFactory(persistenceUnitName);
 			util = factory.getPersistenceUnitUtil();
 			em = factory.createEntityManager();
 
@@ -40,6 +47,7 @@ public class CrimesDAO {
 			LOGGER.error("Error when connecting to the database. " + e.getMessage());
 			throw e;
 		}
+
 		LOGGER.debug("Succesfully opened connection to DB");
 	}
 
@@ -101,6 +109,7 @@ public class CrimesDAO {
 		return resultList.get(resultList.size() - 1);
 	}
 
+	// TODO: egen klass?
 	public List<Crimecategory> getCrimeCategorys() {
 		try {
 			openConnection();

@@ -1,5 +1,7 @@
 package model;
 
+import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class GeoLocationParser {
 
-	private static final String HTTPS_GOOGLEAPIS_ADDRESS = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+	static final String HTTPS_GOOGLEAPIS_ADDRESS = "https://maps.googleapis.com/maps/api/geocode/json?address=";
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoLocationParser.class);
 
 	/**
@@ -25,6 +27,10 @@ public class GeoLocationParser {
 	public Location getGeoLocation(String location) {
 
 		String stringToReadURLFrom = HTTPS_GOOGLEAPIS_ADDRESS + location;
+		return parseGeoData(stringToReadURLFrom);
+	}
+
+	Location parseGeoData(String stringToReadURLFrom) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		try {
@@ -39,12 +45,14 @@ public class GeoLocationParser {
 			return location2;
 		} catch (RestClientException re) {
 			LOGGER.error("Problems with the rest service for getting geolocation as JSON data. "
-					+ re.getMessage());
+					+ re.getMessage(), re);
 			return null;
 		} catch (Exception e) {
-			LOGGER.error("Problems getting geolocation as JSON data. Not related to Rest "
-					+ e.getMessage());
+			LOGGER.error(
+					"Problems getting geolocation as JSON data. Not related to Rest "
+							+ e.getMessage(), e);
 			return null;
 		}
 	}
+
 }
