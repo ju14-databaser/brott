@@ -6,18 +6,19 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+
 /**
  * The persistent class for the CRIMES database table.
  * 
  */
 @Entity
-@Table(name = "CRIMES", schema = "STOCKHOLM")
+@Table(name="CRIMES", schema="STOCKHOLM")
 public class Crime implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Date ERROR_DATE = new Date(0);
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	private String location;
 
@@ -25,14 +26,16 @@ public class Crime implements Serializable {
 	private String date;
 	private String title;
 	private String description;
-
+	
 	@Embedded
 	private Location geoLocation;
 	private Date dateStamp;
 
-	// bi-directional many-to-one association to Crimecategory
+	
+
+	//bi-directional many-to-one association to Crimecategory
 	@ManyToOne
-	@JoinColumn(name = "CRIMECAT_ID")
+	@JoinColumn(name="CRIMECAT_ID")
 	private Crimecategory crimecategory;
 
 	public Crime() {
@@ -45,7 +48,6 @@ public class Crime implements Serializable {
 		createLocation();
 		createDate();
 	}
-
 	public int getId() {
 		return this.id;
 	}
@@ -53,6 +55,7 @@ public class Crime implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 
 	public String getDescription() {
 		return this.description;
@@ -92,19 +95,26 @@ public class Crime implements Serializable {
 	 *         last comma (,)
 	 */
 	public String getCategory() {
-		int i = title.indexOf(",");
-		int j = title.lastIndexOf(",");
 
-		return this.title.substring(i + 1, j);
+		int i = title.indexOf(",")+1;
+		String firstComma=title.substring(i);
+		int j = firstComma.indexOf(",");
+		
+		return this.title.substring(i, i+j);
 	}
 
 	private void createLocation() {
 		int i = description.indexOf('.');
-		if (i == -1) {
-			i = description.length() - 1;
-		}
+		int j = title.lastIndexOf(',');
 
-		this.location = this.description.substring(0, i) + ", Sweden";
+		if (i == -1) {
+			i = description.length()-1;
+		}
+		if (j == -1) {
+			j = description.length()-1;
+		}
+		
+		this.location = this.description.substring(0, i) + this.title.substring(j) +", Sweden";
 	}
 
 	/**
@@ -124,7 +134,7 @@ public class Crime implements Serializable {
 			setDateStamp(ERROR_DATE);
 		}
 	}
-
+	
 	public Date getDateStamp() {
 		return dateStamp;
 	}
@@ -132,7 +142,7 @@ public class Crime implements Serializable {
 	public void setDateStamp(Date dateStamp) {
 		this.dateStamp = dateStamp;
 	}
-
+	
 	public Location getGeoLocation() {
 		return geoLocation;
 	}
@@ -140,5 +150,5 @@ public class Crime implements Serializable {
 	public void setGeoLocation(Location geoLocation) {
 		this.geoLocation = geoLocation;
 	}
-
+	
 }

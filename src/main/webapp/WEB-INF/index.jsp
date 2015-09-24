@@ -20,6 +20,7 @@
 <title>BROTT i Stockholm</title>
 
 <style type="text/css">
+
 body {
 	font-family: Verdana, Geneva, sans-serif;
 	background-color: #539ADF;
@@ -130,7 +131,8 @@ li {
 					map : map,
 					position : geoLocation,
 					title : '${crimes.title}',
-					category:'${crimes.crimecategory.category}'
+					category:'${crimes.crimecategory.category}',
+					relevant:'${crimes.crimecategory.isrelevant}'
 				});
 
 				marker.addListener('click', function() {
@@ -176,16 +178,29 @@ li {
     	}
     	
     }
+    function showRelevantCrimes(){
+
+    	for(var i=0;i<markerArray.length;i++){
+    		if(markerArray[i].relevant=="Y"){
+    			markerArray[i].setVisible(true);
+    		}else{
+    			markerArray[i].setVisible(false);			
+    		}
+    	}
+    	
+    }
 
 </script>
 
 </head>
 <body onload="initialize()">
 
-	<div id="header">
-		<h1 class=stencil>BROTT</h1>
-		<h1 class=consolas>i Stockholm</h1>
-	</div>
+<div id="header">
+	<h1 class=stencil>BROTT  </h1>
+	<h1 class=consolas> i Stockholm</h1>
+</div>
+		
+<p>Här kan du se brott som begåtts i Stockholm. Hoovra över röda markeringarna eller zooma in för en närmare titt! </p>
 
 	<div id="context">
 
@@ -201,8 +216,11 @@ li {
 					<li id="index">${cat.category}</li>
 				</c:forEach>
 			</ul>
-
-			<div id="map"></div>
+	
+	<button class="btn btn-primary" type="button" onClick="showRelevantCrimes()">Visa relevanta boskaps-brott
+			
+	</button>
+	<div id="map"></div>
 		</div>
 
 	</div>
