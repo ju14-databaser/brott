@@ -17,6 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * CrimesDAO connects to a database specified in the persistence.xml file.
+ *
+ */
+
 @Component
 public class CrimesDAO {
 
@@ -27,15 +32,32 @@ public class CrimesDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrimesDAO.class);
 	private String persistenceUnitName;
 
+	/**
+	 * Default constructor that uses the Crimes database for production.
+	 */
 	public CrimesDAO() {
 		persistenceUnitName = PERSISTENCE_UNIT_NAME;
 	}
 
+	/**
+	 * Constructor that allows the user to send in the name of the datasource
+	 * needed. The datasource nmae should already be specified in a
+	 * persistence.xml file.
+	 * 
+	 * @param persistenceUnitName
+	 */
 	public CrimesDAO(String persistenceUnitName) {
 		this.persistenceUnitName = persistenceUnitName;
-
 	}
 
+	/**
+	 * openConnection creates the entityManager to enable transactions to the
+	 * datasource. When the transaction is done it should be followed by the
+	 * closeConnection method that closes the entityManager.
+	 * 
+	 * @throws PersistenceException
+	 *             when there are troubles connecting to the datasource.
+	 */
 	public void openConnection() throws PersistenceException {
 		LOGGER.debug("starting to open connection to DB");
 		try {
@@ -51,10 +73,19 @@ public class CrimesDAO {
 		LOGGER.debug("Succesfully opened connection to DB");
 	}
 
+	/**
+	 * closeConnection closes an open EntityManager. Should always be used after
+	 * a transaction.
+	 */
 	public void closeConnection() {
 		em.close();
 	}
 
+	/**
+	 * Adds a new crime to the datasource
+	 * 
+	 * @param crime
+	 */
 	public void addCrime(Crime crime) {
 
 		em.getTransaction().begin();
@@ -63,8 +94,31 @@ public class CrimesDAO {
 
 	}
 
-	public void updateCrime(Crime crime, Location geoLocation) {
+	/**
+	 * Adds a new crimecategory to the datasource.
+	 * 
+	 * Rememeber to openConnection before and closeConnection after.
+	 * 
+	 * @param crimecategory
+	 */
+	public void addCrimecategory(Crimecategory crimecategory) {
+		em.getTransaction().begin();
+		em.persist(crimecategory);
+		em.getTransaction().commit();
+	}
 
+	/**
+	 * updateCrime takes the parameter Crime (that should already exist in the
+	 * datasource) and updates it in the datasource
+	 * 
+	 * Rememeber to openConnection before and closeConnection after.
+	 * 
+	 * @param crime
+	 * @param geoLocation
+	 */
+	public void updateCrime(Crime crime, Location geoLocation) {
+		// TODO: Check that this works as expected, if the location can be added
+		// before updating
 		Object identifier = util.getIdentifier(crime);
 
 		Crime crimeQuery = em.find(Crime.class, identifier);
@@ -76,6 +130,14 @@ public class CrimesDAO {
 
 	}
 
+	/**
+	 * Retrieves all Crimes from the datasource. The method takes care of both
+	 * opening and closing the connection.
+	 * 
+	 * @return a List of all Crimes existing in the datasource.
+	 * @throws PersistenceException
+	 *             if there are troubles when connecting to the datasource
+	 */
 	public List<Crime> getAllCrimes() {
 		try {
 			openConnection();
@@ -91,6 +153,18 @@ public class CrimesDAO {
 
 	}
 
+	/**
+	 * getLatestCrime gets the Crime with the newest Title String from the
+	 * datasource.
+	 * 
+	 * The method takes care of both opening and closing the connection.
+	 * 
+	 * @throws PersistenceException
+	 *             when there are troubles connecting to the datasource
+	 * @return Crime with the newest datestamp in the Title String
+	 * 
+	 * @return a new empty Crime if there are no Crimes in the datasource
+	 */
 	public Crime getLatestCrime() {
 		try {
 			openConnection();
@@ -109,7 +183,16 @@ public class CrimesDAO {
 		return resultList.get(resultList.size() - 1);
 	}
 
-	// TODO: egen klass?
+	/**
+	 * Retrieves all CrimeCategories from the datasource.
+	 *
+	 * The method takes care of both opening and closing the connection.
+	 * 
+	 * @return a list of all CrimeCategories
+	 * @throws PersistenceException
+	 *             if there are no connection to the datasource
+	 * 
+	 */
 	public List<Crimecategory> getCrimeCategorys() {
 		try {
 			openConnection();

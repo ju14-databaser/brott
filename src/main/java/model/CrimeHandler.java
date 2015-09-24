@@ -24,6 +24,7 @@ public class CrimeHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrimeHandler.class);
 	private GeoLocationParser geoLocationParser;
 	private CrimesDAO crimesDAO;
+	private boolean allHasGeoLocation;
 
 	public CrimeHandler() {
 	}
@@ -32,6 +33,7 @@ public class CrimeHandler {
 	public CrimeHandler(CrimesDAO crimesDAO) {
 		this.crimesDAO = crimesDAO;
 		geoLocationParser = new GeoLocationParser();
+		allHasGeoLocation=false;
 	}
 
 	// TODO: Går det att avbryta om det tar för lång tid?
@@ -68,6 +70,7 @@ public class CrimeHandler {
 			return newCrimes;
 		}
 		// TODO: add geolocation
+		allHasGeoLocation=false;
 		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
 		newCrimes = setCrimeCategory(newCrimes, crimeCat);
 		return newCrimes;
@@ -117,6 +120,7 @@ public class CrimeHandler {
 			crimes = setCrimeCategory(crimes, crimeCat);
 
 		}
+		allHasGeoLocation= false;
 		return crimes;
 	}
 
@@ -164,6 +168,10 @@ public class CrimeHandler {
 
 	@Scheduled(fixedDelay = 300000, initialDelay = 300000)
 	public void updateGeoLocationsScheduled() {
+
+		if (allHasGeoLocation) {
+			return;
+		}
 		LOGGER.debug("Starting scheduled job for updating geolocations in database.");
 		int noUpdated = 0;
 		try {
@@ -210,6 +218,7 @@ public class CrimeHandler {
 			}
 
 		}
+		allHasGeoLocation = true;
 		crimesDAO.closeConnection();
 		return updated;
 	}
@@ -228,19 +237,23 @@ public class CrimeHandler {
 		}
 		return allCrimes;
 	}
-	
-	public List<Crimecategory> getAllCategorysFromDB(){
+
+	public List<Crimecategory> getAllCategorysFromDB() {
 		List<Crimecategory> crimecat;
 		try {
-		crimecat=crimesDAO.getCrimeCategorys();
-		}catch(PersistenceException e){
+			crimecat = crimesDAO.getCrimeCategorys();
+		} catch (PersistenceException e) {
 			LOGGER.error("Error when connecting to the database for getting all categorys. "
 					+ e.getMessage());
 			throw new RuntimeException(
 					"Error when connecting to the database for getting all categorys. "
-					+ e.getMessage());
+							+ e.getMessage());
 		}
 		return crimecat;
+	}
+
+	public boolean isAllHasGeoLocation() {
+		return allHasGeoLocation;
 	}
 
 }

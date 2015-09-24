@@ -1,0 +1,96 @@
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+	<channel>
+		<title>Händelser RSS - Stockholms län</title>
+		<link>http://polisen.se/</link>
+		<description></description>
+		<item>
+			<title>2015-09-23 14:37, Stöld/inbrott, Haninge</title>
+			<link>
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1437-Stoldinbrott-Haninge/
+			</link>
+			<description>Vädurens Gata, Brandhagen. Inbrott i lägenhet.</description>
+			<guid isPermaLink="false">
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1437-Stoldinbrott-Haninge/_Wed,-23-Sep-2015-13:20:43-GMT
+			</guid>
+			<pubDate>Wed, 23 Sep 2015 13:20:43 GMT</pubDate>
+		</item>
+		<item>
+			<title>2015-09-23 15:01, Rattfylleri, Stockholm</title>
+			<link>
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1501-Rattfylleri-Stockholm/
+			</link>
+			<description>
+				Annebodavägen, Liseberg. Misstänkt drograttfyllerist stoppad.
+			</description>
+			<guid isPermaLink="false">
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1501-Rattfylleri-Stockholm/_Wed,-23-Sep-2015-13:10:16-GMT
+			</guid>
+			<pubDate>Wed, 23 Sep 2015 13:10:16 GMT</pubDate>
+		</item>
+		<item>
+			<title>2015-09-23 15:00, Brand, Huddinge</title>
+			<link>
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1500-Brand-Huddinge/
+			</link>
+			<description>
+				Forelltorget, Sjödalen. Kraftig brandlukt i stormarknads varuintag.
+			</description>
+			<guid isPermaLink="false">
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1500-Brand-Huddinge/_Wed,-23-Sep-2015-13:05:53-GMT
+			</guid>
+			<pubDate>Wed, 23 Sep 2015 13:05:53 GMT</pubDate>
+		</item>
+		<item>
+			<title>2015-09-23 13:39, Vapenlagen, Stockholm</title>
+			<link>
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1339-Vapenlagen-Stockholm/
+			</link>
+			<description>
+				Östermalm. Oroliga personer ringer om beväpnade män.
+			</description>
+			<guid isPermaLink="false">
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1339-Vapenlagen-Stockholm/_Wed,-23-Sep-2015-11:44:41-GMT
+			</guid>
+			<pubDate>Wed, 23 Sep 2015 11:44:41 GMT</pubDate>
+		</item>
+		<item>
+			<title>2015-09-23 13:00, Stöld, Järfälla</title>
+			<link>
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1300-Stold-Jarfalla/
+			</link>
+			<description>
+				Barkarby handelsplats. Personal springer efter en tjuv.
+			</description>
+			<guid isPermaLink="false">
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1300-Stold-Jarfalla/_Wed,-23-Sep-2015-11:39:07-GMT
+			</guid>
+			<pubDate>Wed, 23 Sep 2015 11:39:07 GMT</pubDate>
+		</item>
+		<item>
+			<title>2015-09-23 12:23, larm överfall, Järfälla</title>
+			<link>
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1223-larm-overfall-Jarfalla/
+			</link>
+			<description>
+				Barkarby station. Bråk mellan bussförare och resenär.
+			</description>
+			<guid isPermaLink="false">
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1223-larm-overfall-Jarfalla/_Wed,-23-Sep-2015-11:22:38-GMT
+			</guid>
+			<pubDate>Wed, 23 Sep 2015 11:22:38 GMT</pubDate>
+		</item>
+		<item>
+			<title>2015-09-23 11:44, Bedrägeri, Stockholm</title>
+			<link>
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1144-Bedrageri-Stockholm/
+			</link>
+			<description>
+				Gullmarsplan. En bilist kontrolleras då bilen är falskskyltad.
+			</description>
+			<guid isPermaLink="false">
+				http://polisen.se/Stockholms_lan/Aktuellt/Handelser/Stockholms-lan/2015-09-23-1144-Bedrageri-Stockholm/_Wed,-23-Sep-2015-10:55:23-GMT
+			</guid>
+			<pubDate>Wed, 23 Sep 2015 10:55:23 GMT</pubDate>
+		</item>
+	</channel>
+</rss>
