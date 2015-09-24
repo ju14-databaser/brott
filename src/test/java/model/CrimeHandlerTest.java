@@ -62,12 +62,12 @@ public class CrimeHandlerTest {
 		
 		crimeList=crimeHandler.setCrimeCategory(crimeList, crimecat);
 		
-		assertReflectionEquals(" Brand".toLowerCase(), crimeList.get(0).getCategory().toLowerCase());
-		assertReflectionEquals(" Stöld".toLowerCase(), crimeList.get(1).getCategory().toLowerCase());
-		assertReflectionEquals(" Trafikolycka".toLowerCase(), crimeList.get(2).getCategory().toLowerCase());
-		assertReflectionEquals(" Trafikolycka".toLowerCase(), crimeList.get(3).getCategory().toLowerCase());
-		assertReflectionEquals(" Våld/hot mot tjänsteman".toLowerCase(), crimeList.get(4).getCategory().toLowerCase());
-		assertReflectionEquals(" Djur skadat/omhändertaget".toLowerCase(), crimeList.get(5).getCategory().toLowerCase());
+		assertReflectionEquals("Brand".toLowerCase(),crimeList.get(0).getCrimecategory().getCategory().toLowerCase() );
+		assertReflectionEquals("Stöld".toLowerCase(),crimeList.get(1).getCrimecategory().getCategory().toLowerCase() );
+		assertReflectionEquals("Trafikolycka".toLowerCase(),crimeList.get(2).getCrimecategory().getCategory().toLowerCase() );
+		assertReflectionEquals("Trafikolycka".toLowerCase(),crimeList.get(3).getCrimecategory().getCategory().toLowerCase() );
+		assertReflectionEquals("Våld".toLowerCase(),crimeList.get(4).getCrimecategory().getCategory().toLowerCase() );
+		assertReflectionEquals("Djur skadat/omhändertaget".toLowerCase(),crimeList.get(5).getCrimecategory().getCategory().toLowerCase() );
 	}
 
 }
