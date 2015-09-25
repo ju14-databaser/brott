@@ -21,7 +21,7 @@ body {
 	margin: 0px auto;
 	background-color: #FFFFFF;
 	color: #2879b3;
-	padding-left: 30%;
+	padding-left: 25%;
 	padding-top: 1%;
 }
 
