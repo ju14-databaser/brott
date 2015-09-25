@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class CrimesController {
 
-	private CrimeFacade crimeHandler;
+	private CrimeFacade crimeFacade;
 
 	/**
 	 * Constructor for the Spring MVC Controller. Uses autowiring through @Inject
@@ -35,7 +36,7 @@ public class CrimesController {
 	 */
 	@Inject
 	public CrimesController(CrimeFacade crimeHandler) {
-		this.crimeHandler = crimeHandler;
+		this.crimeFacade = crimeHandler;
 
 	}
 
@@ -48,10 +49,10 @@ public class CrimesController {
 	 *            from the web-request. Picked up by Spring framework.
 	 * @return "index" a String representing the index.jsp page
 	 */
-	@RequestMapping("/Brott")
+	@RequestMapping("/brottkarta")
 	public String getCrime(Model model) {
-		List<Crime> allCrimes = crimeHandler.getAllCrimesFromDB();
-		List<Crimecategory> crimecat = crimeHandler.getAllCategorysFromDB();
+		List<Crime> allCrimes = crimeFacade.getAllCrimesFromDB();
+		List<Crimecategory> crimecat = crimeFacade.getAllCategorysFromDB();
 
 		model.addAttribute("Crimecat", crimecat);
 		model.addAttribute("Crimes", allCrimes);
@@ -74,10 +75,11 @@ public class CrimesController {
 	 *            from the web-request. Picked up by Spring framework.
 	 * @return "allCrimes" a String representing the alLCrimes.jsp page
 	 */
+	//ANNA 
 	@RequestMapping("/New")
 	public String loadDatabaseWithNewCrimes(Model model) {
-		List<Crime> allCrimesFromPolice = crimeHandler.getNewCrimesFromPolice();
-		crimeHandler.writeCrimesToDB(allCrimesFromPolice);
+		List<Crime> allCrimesFromPolice = crimeFacade.getNewCrimesFromPolice();
+		crimeFacade.writeCrimesToDB(allCrimesFromPolice);
 
 		model.addAttribute("crimeNo", allCrimesFromPolice.size());
 		model.addAttribute("crimes", allCrimesFromPolice);
@@ -107,8 +109,8 @@ public class CrimesController {
 	 */
 	@RequestMapping("/load")
 	public String loadDatabaseWithAllCrimes(Model model) {
-		List<Crime> allCrimesFromPolice = crimeHandler.getAllCrimesFromPolice();
-		crimeHandler.writeCrimesToDB(allCrimesFromPolice);
+		List<Crime> allCrimesFromPolice = crimeFacade.getAllCrimesFromPolice();
+		crimeFacade.writeCrimesToDB(allCrimesFromPolice);
 
 		model.addAttribute("crimeNo", allCrimesFromPolice.size());
 		model.addAttribute("crimes", allCrimesFromPolice);
@@ -126,7 +128,7 @@ public class CrimesController {
 	 */
 	@RequestMapping("/update")
 	public String updateGeoLocationsFor10Entries(Model model) {
-		model.addAttribute("updated", crimeHandler.updateGeoLocations());
+		model.addAttribute("updated", crimeFacade.updateGeoLocations());
 
 		return showDBStatistics(model);
 	}
@@ -140,9 +142,9 @@ public class CrimesController {
 	 *            from the web-request. Picked up by Spring framework.
 	 * @return "dbInfo" a String representing the "dbInfo.jsp" page.
 	 */
-	@RequestMapping("/statistik")
+	@RequestMapping("/admin")
 	public String showDBStatistics(Model model) {
-		List<Crime> allCrimes = crimeHandler.getAllCrimesFromDB();
+		List<Crime> allCrimes = crimeFacade.getAllCrimesFromDB();
 
 		model.addAttribute("noRows", allCrimes.size());
 
@@ -167,6 +169,17 @@ public class CrimesController {
 	 */
 	@ExceptionHandler(RuntimeException.class)
 	public String databaseConnectionError() {
+		return "error";
+	}
+
+	/**
+	 * Method that will catch if there is a RuntimeException and re-direct to
+	 * the error.jsp page.
+	 * 
+	 * @return "error" a String representation of the error.jsp page
+	 */
+	@ExceptionHandler(IOException.class)
+	public String rssFeedError() {
 		return "error";
 	}
 
