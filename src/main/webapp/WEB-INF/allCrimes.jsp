@@ -4,14 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Polishändelser</title>
 </head>
 
 <style type="text/css">
 body {
 	font-family: Verdana, Geneva, sans-serif;
 	background-color: #539ADF;
-	color: red;
 	padding: 0px;
 	height: 100%;
 }
@@ -47,12 +46,6 @@ body {
 	margin-bottom: 10px;
 }
 
-#link {
-	margin: 0px auto;
-	padding-left: 45%;
-	size: 1, 5em;
-}
-
 .textShown {
 	color: white;
 	padding-left: 40%;
@@ -64,7 +57,7 @@ body {
 <body>
 
 	<div id="header">
-		<h1 class=stencil>BROTT</h1>
+		<h1 class=stencil>POLISHÄNDELSER  </h1>
 		<h1 class=consolas>i Stockholm</h1>
 	</div>
 	<div class=textShown>
