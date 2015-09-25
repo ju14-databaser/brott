@@ -32,7 +32,7 @@ public class CrimeTest {
 
 	@Test
 	public void locationStringGetsCorrectPartOfDesriptionString() {
-		String expectedLocation = "Sedelvägen, Tumba, Sweden";
+		String expectedLocation = "Sedelvägen, Tumba, Botkyrka, Sweden";
 		String actualLocation = crime.getLocation();
 
 		assertEquals("Fel parsning", expectedLocation, actualLocation);

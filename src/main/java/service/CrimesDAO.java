@@ -97,14 +97,16 @@ public class CrimesDAO {
 	/**
 	 * Adds a new crimecategory to the datasource.
 	 * 
-	 * Rememeber to openConnection before and closeConnection after.
+	 * Method will openConnection before and closeConnection after.
 	 * 
 	 * @param crimecategory
 	 */
 	public void addCrimecategory(Crimecategory crimecategory) {
+		openConnection();
 		em.getTransaction().begin();
 		em.persist(crimecategory);
 		em.getTransaction().commit();
+		closeConnection();
 	}
 
 	/**
@@ -116,7 +118,7 @@ public class CrimesDAO {
 	 * @param crime
 	 * @param geoLocation
 	 */
-	public void updateCrime(Crime crime, Location geoLocation) {
+	public void updateCrimeGeoLocation(Crime crime, Location geoLocation) {
 		// TODO: Check that this works as expected, if the location can be added
 		// before updating
 		Object identifier = util.getIdentifier(crime);
@@ -150,6 +152,24 @@ public class CrimesDAO {
 		List<Crime> resultList = crimesQuery.getResultList();
 		closeConnection();
 		return resultList;
+
+	}
+
+	/**
+	 * Get a specified crime from the datasource.
+	 * 
+	 * Opens and closes the connection.
+	 * 
+	 * @param crime
+	 *            the crime you want to get from the datasource
+	 * @return the crime as it is in the database
+	 */
+	public Crime getCrime(Crime crime) {
+		openConnection();
+		Object identifier = util.getIdentifier(crime);
+		Crime crime2 = em.find(Crime.class, identifier);
+		closeConnection();
+		return crime2;
 
 	}
 
@@ -207,6 +227,44 @@ public class CrimesDAO {
 
 		closeConnection();
 		return crimecat;
+	}
+
+	/**
+	 * Get a specified crimecategory from the datasource.
+	 * 
+	 * Opens and closes the connection.
+	 * 
+	 * @param crimecategory
+	 *            the crimecategory you want to get from the datasource
+	 * @return the crimecategory as it is in the database
+	 */
+	public Crimecategory getCrimeCategory(Crimecategory crimecategory) {
+		openConnection();
+
+		Object identifier = util.getIdentifier(crimecategory);
+		Crimecategory findCrimecategory = em.find(Crimecategory.class, identifier);
+		closeConnection();
+		return findCrimecategory;
+	}
+
+	/**
+	 * Get a specified crimecategory from the datasource.
+	 * 
+	 * Opens and closes the connection.
+	 * 
+	 * @param crimecategory
+	 *            the name of the crimecatgory you want to get from the
+	 *            datasource
+	 * @return the crimecategory as it is in the database
+	 */
+	public Crimecategory getCrimecategory(String categoryName) {
+		openConnection();
+		TypedQuery<Crimecategory> createQuery = em.createQuery(
+				"SELECT c FROM Crimecategory c WHERE c.category = :category", Crimecategory.class);
+		createQuery.setParameter("category", categoryName);
+		List<Crimecategory> resultList = createQuery.getResultList();
+		closeConnection();
+		return resultList.get(0);
 	}
 
 }

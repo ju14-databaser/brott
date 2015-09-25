@@ -33,7 +33,7 @@ public class CrimeHandler {
 	public CrimeHandler(CrimesDAO crimesDAO) {
 		this.crimesDAO = crimesDAO;
 		geoLocationParser = new GeoLocationParser();
-		allHasGeoLocation=false;
+		allHasGeoLocation = false;
 	}
 
 	// TODO: Går det att avbryta om det tar för lång tid?
@@ -70,7 +70,7 @@ public class CrimeHandler {
 			return newCrimes;
 		}
 		// TODO: add geolocation
-		allHasGeoLocation=false;
+		allHasGeoLocation = false;
 		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
 		newCrimes = setCrimeCategory(newCrimes, crimeCat);
 		return newCrimes;
@@ -120,7 +120,7 @@ public class CrimeHandler {
 			crimes = setCrimeCategory(crimes, crimeCat);
 
 		}
-		allHasGeoLocation= false;
+		allHasGeoLocation = false;
 		return crimes;
 	}
 
@@ -137,6 +137,9 @@ public class CrimeHandler {
 	public List<Crime> setCrimeCategory(List<Crime> crimes, List<Crimecategory> crimeCat) {
 		// Förbereder ett Crimecategory med "Övrigt" som categori
 		Crimecategory notFound = null;
+
+		// TODO: byt ut till att hämta övrigt kategorien direkt från datbasen
+		// med getCrimeCategory(String) metoden
 		for (Crimecategory cat : crimeCat) {
 			if (cat.getCategory().equalsIgnoreCase("Övrigt")) {
 				notFound = cat;
@@ -205,7 +208,7 @@ public class CrimeHandler {
 				Location geoLocation = geoLocationParser.getGeoLocation(crime.getLocation());
 
 				if (geoLocation != null) {
-					crimesDAO.updateCrime(crime, geoLocation);
+					crimesDAO.updateCrimeGeoLocation(crime, geoLocation);
 					updated++;
 				}
 

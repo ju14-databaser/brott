@@ -28,7 +28,7 @@ public class CrimeHandlerTest {
 		XMLParser xmlParser = new XMLParser(correctRssFeed);
 
 		List<Crime> parseAllCrimes = xmlParser.parseAllCrimes();
-		
+
 		crimesDAO.openConnection();
 		for (Crime crime : parseAllCrimes) {
 			crimesDAO.addCrime(crime);
@@ -44,7 +44,7 @@ public class CrimeHandlerTest {
 		Assert.assertTrue(crimeHandler.isAllHasGeoLocation());
 
 	}
-	
+
 	@Test
 	public void checkIfRightCategoryFound() throws Exception {
 
@@ -52,22 +52,29 @@ public class CrimeHandlerTest {
 		CrimeHandler crimeHandler = new CrimeHandler(crimesDAO);
 
 		List<Crimecategory> crimecat = crimeHandler.getAllCategorysFromDB();
-		List<Crime> crimeList= new ArrayList<Crime>();
-		crimeList.add(new Crime("2015-09-22 12:14, Brand, Huddinge","Holmträskvägen, Sundby. Brand i lagerbyggnad."));
-		crimeList.add(new Crime("2015-09-22 06:59, Stöld, försök, Järfälla","Tomasvägen, Jakobsberg. Ynglingar som bryter på mopeder."));	
-		crimeList.add(new Crime("2015-09-22 06:11, Trafikolycka, personskada, Solna","E4, Järva Krog, Ulriksdal. Två personbilar i sammanstötning."));
-		crimeList.add(new Crime("2015-09-21 07:27, Trafikolycka, personskada, Norrtälje","Norrtälje. Cyklist påkörd."));
-		crimeList.add(new Crime("2015-09-21 01:37, Våld/hot mot tjänsteman, Upplands Väsby","Centrumanläggning Bergkällavägen."));
-		crimeList.add(new Crime("2015-09-18 09:38, Djur skadat/omhändertaget, Huddinge","Sundby. En anmälare tror en katt är självmordsbenägen."));
-		
-		crimeList=crimeHandler.setCrimeCategory(crimeList, crimecat);
-		
-		assertReflectionEquals("Brand".toLowerCase(),crimeList.get(0).getCrimecategory().getCategory().toLowerCase() );
-		assertReflectionEquals("Stöld".toLowerCase(),crimeList.get(1).getCrimecategory().getCategory().toLowerCase() );
-		assertReflectionEquals("Trafikolycka".toLowerCase(),crimeList.get(2).getCrimecategory().getCategory().toLowerCase() );
-		assertReflectionEquals("Trafikolycka".toLowerCase(),crimeList.get(3).getCrimecategory().getCategory().toLowerCase() );
-		assertReflectionEquals("Våld".toLowerCase(),crimeList.get(4).getCrimecategory().getCategory().toLowerCase() );
-		assertReflectionEquals("Djur skadat/omhändertaget".toLowerCase(),crimeList.get(5).getCrimecategory().getCategory().toLowerCase() );
+		List<Crime> crimeList = new ArrayList<Crime>();
+		crimeList.add(new Crime("2015-09-22 12:14, Brand, Huddinge",
+				"Holmträskvägen, Sundby. Brand i lagerbyggnad."));
+		crimeList.add(new Crime("2015-09-22 06:59, Stöld, försök, Järfälla",
+				"Tomasvägen, Jakobsberg. Ynglingar som bryter på mopeder."));
+		crimeList.add(new Crime("2015-09-22 06:11, Trafikolycka, personskada, Solna",
+				"E4, Järva Krog, Ulriksdal. Två personbilar i sammanstötning."));
+		crimeList.add(new Crime("2015-09-21 07:27, Trafikolycka, personskada, Norrtälje",
+				"Norrtälje. Cyklist påkörd."));
+		crimeList.add(new Crime("2015-09-21 01:37, Våld/hot mot tjänsteman, Upplands Väsby",
+				"Centrumanläggning Bergkällavägen."));
+		crimeList.add(new Crime("2015-09-18 09:38, Djur skadat/omhändertaget, Huddinge",
+				"Sundby. En anmälare tror en katt är självmordsbenägen."));
+
+		crimeList = crimeHandler.setCrimeCategory(crimeList, crimecat);
+
+		assertReflectionEquals("Brand", crimeList.get(0).getCrimecategory().getCategory());
+		assertReflectionEquals("Stöld", crimeList.get(1).getCrimecategory().getCategory());
+		assertReflectionEquals("Trafikolycka", crimeList.get(2).getCrimecategory().getCategory());
+		assertReflectionEquals("Trafikolycka", crimeList.get(3).getCrimecategory().getCategory());
+		assertReflectionEquals("Våld", crimeList.get(4).getCrimecategory().getCategory());
+		assertReflectionEquals("Djur skadat/omhändertaget", crimeList.get(5).getCrimecategory()
+				.getCategory());
 	}
 
 }

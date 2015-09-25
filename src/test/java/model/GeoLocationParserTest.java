@@ -4,9 +4,6 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 
 import java.net.URI;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
-
 import org.junit.Before;
 import org.junit.Test;
 
