@@ -5,12 +5,17 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/data/jpa http://www.springframework.org/data/jpa/spring-jpa-1.3.xsd">
-
+	<!-- This is our spring-bean configuration. Below objects are created at 
+		startup as singletons so that there only needs to be one instance of each 
+		object. 
+		
+		We have a scheduled task for updating geolocations hence we have 
+		a configuration for task: annotaion-driven -->
 	<task:annotation-driven />
-	<bean name="Controller" class="controller.BrottController" />
+	<bean name="Controller" class="controller.CrimesController" />
 	<bean name="CrimeHandler" class="model.CrimeHandler" />
 	<bean name="CrimesDAO" class="service.CrimesDAO">
-		<property name="persistenceUnitName" ref="persistenceUnit"/>
+		<property name="persistenceUnitName" ref="persistenceUnit" />
 	</bean>
 	<bean name="persistenceUnit" class="java.lang.String">
 		<constructor-arg value='Crimes'></constructor-arg>

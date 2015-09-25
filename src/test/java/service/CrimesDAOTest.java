@@ -8,6 +8,7 @@ import javax.persistence.Persistence;
 
 import model.Crime;
 import model.Crimecategory;
+import model.Location;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,12 +34,14 @@ public class CrimesDAOTest {
 	private Crime simpleCrime;
 	private Crime crime1;
 	private Crime crime2;
+	private Crimecategory cat2;
 
 	@Before
 	public void setup() {
 		simpleCrime = new Crime(TITLE, DESC);
 		crime1 = new Crime(crimeTitle1, crimeDesc1);
 		crime2 = new Crime(crimeTitle2, crimeDesc2);
+
 		LOGGER.info("Starting in-memory database for unit tests");
 
 		// Creating testDB database
@@ -50,18 +53,16 @@ public class CrimesDAOTest {
 		cat = new Crimecategory();
 		cat.setCategory("skadegörelse");
 		cat.setIsrelevant("y");
-		em.getTransaction().begin();
-		em.persist(cat);
-		em.getTransaction().commit();
-		em.close();
+		cat2 = new Crimecategory();
+		cat2.setCategory("bråk");
+		cat2.setIsrelevant("y");
+		crimesDAO.addCrimecategory(cat);
 	}
 
 	@Test
 	public void insertCrime_RetrieveCrime_FieldsAreEqual() {
 
-		crimesDAO.openConnection();
-		crimesDAO.addCrime(simpleCrime);
-		crimesDAO.closeConnection();
+		addSimpleCrimeToTestDB();
 
 		List<Crime> allCrimes = crimesDAO.getAllCrimes();
 		Crime actualCrime = null;
@@ -78,22 +79,81 @@ public class CrimesDAOTest {
 
 	}
 
+	private void addSimpleCrimeToTestDB() {
+		crimesDAO.openConnection();
+		crimesDAO.addCrime(simpleCrime);
+		crimesDAO.closeConnection();
+	}
+
 	@Ignore
 	@Test
 	public void twoCrimesInDatabase_retriveLatestCrime() {
-	//TODO: gör så att databasen rensas vid varje test
-		crimesDAO.openConnection();					
+		// TODO: gör så att databasen rensas vid varje test
+		crimesDAO.openConnection();
 		crimesDAO.addCrime(crime1);
 		crimesDAO.addCrime(crime2);
 		crimesDAO.closeConnection();
 
 		Assert.assertEquals(crime1.getTitle(), crimesDAO.getLatestCrime().getTitle());
 	}
-	
+
 	@Test
-	public void updateCrimetest(){
-		//TODO: skriv testet
+	public void insertCrime_GetCrimeBack() {
+		addSimpleCrimeToTestDB();
+
+		Crime actualCrime = crimesDAO.getCrime(simpleCrime);
+
+		Assert.assertEquals(simpleCrime.getTitle(), actualCrime.getTitle());
+		Assert.assertEquals(simpleCrime.getDescription(), actualCrime.getDescription());
+		Assert.assertEquals(simpleCrime.getDateStamp(), actualCrime.getDateStamp());
+		Assert.assertEquals(simpleCrime.getLocation(), actualCrime.getLocation());
+
 	}
-	
-		
+
+	@Test
+	public void updateCrimetest() {
+		addSimpleCrimeToTestDB();
+		Location expectedLocation = new Location("59.39845440000001", "17.8707829");
+
+		Assert.assertNull(simpleCrime.getGeoLocation());
+
+		crimesDAO.openConnection();
+		crimesDAO.updateCrimeGeoLocation(simpleCrime, expectedLocation);
+		crimesDAO.closeConnection();
+		Crime actualCrime = crimesDAO.getCrime(simpleCrime);
+
+		ReflectionAssert.assertReflectionEquals(expectedLocation, actualCrime.getGeoLocation());
+	}
+
+	@Test
+	public void insertTwoCrimeCategories_retrieveTwoCrimeCategories() {
+		crimesDAO.addCrimecategory(cat2);
+		Crimecategory fightcat = crimesDAO.getCrimeCategory(cat2);
+		Crimecategory otherCat = crimesDAO.getCrimeCategory(cat);
+
+		ReflectionAssert.assertReflectionEquals(cat, otherCat);
+		ReflectionAssert.assertReflectionEquals(cat2, fightcat);
+	}
+
+	@Test
+	public void insertCrimeCategory_getCrimeCategoryBack() {
+
+		crimesDAO.addCrimecategory(cat2);
+
+		Crimecategory crimeCategory = crimesDAO.getCrimeCategory(cat2);
+
+		ReflectionAssert.assertReflectionEquals(cat2, crimeCategory);
+	}
+
+	@Test
+	public void getCrimeCategoryFromDBBAsedOnString() {
+
+		crimesDAO.addCrimecategory(cat2);
+
+		Crimecategory singleResult = crimesDAO.getCrimecategory("bråk");
+
+		ReflectionAssert.assertReflectionEquals(cat2, singleResult);
+
+	}
+
 }

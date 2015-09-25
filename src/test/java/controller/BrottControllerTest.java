@@ -21,7 +21,7 @@ public class BrottControllerTest {
 
 		CrimesDAO crimesDAO = new CrimesDAO("TestDB");
 		CrimeHandler crimeHandler = new CrimeHandler(crimesDAO);
-		BrottController controller = new BrottController(crimeHandler);
+		CrimesController controller = new CrimesController(crimeHandler);
 		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
 		MvcResult andReturn = mockMvc.perform(get("/statistik")).andExpect(status().isOk())
