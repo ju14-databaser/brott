@@ -1,14 +1,13 @@
 package model;
 
-import java.io.IOException;
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
+
 import java.util.ArrayList;
 import java.util.List;
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
+
 import org.junit.Assert;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
-import commonj.sdo.helper.XMLHelper;
 import service.CrimesDAO;
 
 public class CrimeHandlerTest {
@@ -17,8 +16,11 @@ public class CrimeHandlerTest {
 	// kontrollera att innehållet hamnar i en databas (helst en embedded db
 	// enbart för test)
 
-	// TODO: test på vilka kategorier som ett Crime får
-
+	/**
+	 * @author Lina
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void updateGeoLocationsStopsWhenReachingEndOfDatabase() throws Exception {
 		CrimesDAO crimesDAO = new CrimesDAO("TestDB");
@@ -45,6 +47,11 @@ public class CrimeHandlerTest {
 
 	}
 
+	/**
+	 * 
+	 * @author Erik
+	 * @throws Exception
+	 */
 	@Test
 	public void checkIfRightCategoryFound() throws Exception {
 

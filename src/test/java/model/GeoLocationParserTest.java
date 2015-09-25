@@ -2,21 +2,19 @@ package model;
 
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
-import java.net.URI;
-
-import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class GeoLocationParserTest {
 
-	private String jsonFile;
-	private URI uri;
-
-	@Before
-	public void setup() {
-		jsonFile = "src/test/resources/adressGoogleGeoJson.json";
-	}
-
+	/**
+	 * This test will only work when there is an internet connection. It is
+	 * supposed to be run manually.
+	 * 
+	 * @author Lina
+	 * 
+	 */
+	@Ignore
 	@Test
 	public void adressSentInForParsing_correctLocationIsCreated() {
 
@@ -24,11 +22,9 @@ public class GeoLocationParserTest {
 		String adressToSearch = "Flygarvägen 217, Järfälla, Sweden";
 
 		GeoLocationParser geoLocationParser = new GeoLocationParser();
-		Location actualLocation = geoLocationParser
-				.getGeoLocation(adressToSearch);
+		Location actualLocation = geoLocationParser.getGeoLocation(adressToSearch);
 
 		assertReflectionEquals(expectedLocation, actualLocation);
 	}
-
 
 }

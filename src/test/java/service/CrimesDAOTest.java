@@ -2,10 +2,6 @@ package service;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import model.Crime;
 import model.Crimecategory;
 import model.Location;
@@ -20,8 +16,6 @@ import org.unitils.reflectionassert.ReflectionAssert;
 
 public class CrimesDAOTest {
 
-	private EntityManager em;
-	private EntityManagerFactory factory;
 	private CrimesDAO crimesDAO;
 	private static final Logger LOGGER = LoggerFactory.getLogger(CrimesDAOTest.class);
 	private Crimecategory cat;
@@ -43,19 +37,17 @@ public class CrimesDAOTest {
 		crime2 = new Crime(crimeTitle2, crimeDesc2);
 
 		LOGGER.info("Starting in-memory database for unit tests");
-
-		// Creating testDB database
-
-		crimesDAO = new CrimesDAO("TestDB");
-		factory = Persistence.createEntityManagerFactory("TestDB");
-
-		em = factory.createEntityManager();
 		cat = new Crimecategory();
 		cat.setCategory("skadegörelse");
 		cat.setIsrelevant("y");
 		cat2 = new Crimecategory();
 		cat2.setCategory("bråk");
 		cat2.setIsrelevant("y");
+
+		// Creating testDB database
+
+		crimesDAO = new CrimesDAO("TestDB");
+
 		crimesDAO.addCrimecategory(cat);
 	}
 
@@ -85,10 +77,13 @@ public class CrimesDAOTest {
 		crimesDAO.closeConnection();
 	}
 
+	/**
+	 * Ignore on this test since the database is currently not cleaned between
+	 * each test - so this test is not always working.
+	 */
 	@Ignore
 	@Test
 	public void twoCrimesInDatabase_retriveLatestCrime() {
-		// TODO: gör så att databasen rensas vid varje test
 		crimesDAO.openConnection();
 		crimesDAO.addCrime(crime1);
 		crimesDAO.addCrime(crime2);
@@ -111,11 +106,12 @@ public class CrimesDAOTest {
 	}
 
 	@Test
-	public void updateCrimetest() {
+	public void updateLocationOnCrime_UpdateDatasource_GetUpdatedObjectBack_LocationIsCorrect() {
 		addSimpleCrimeToTestDB();
 		Location expectedLocation = new Location("59.39845440000001", "17.8707829");
-
-		Assert.assertNull(simpleCrime.getGeoLocation());
+		
+		Crime expectedCrime = crimesDAO.getCrime(simpleCrime);
+		Assert.assertNull(expectedCrime.getGeoLocation());
 
 		crimesDAO.openConnection();
 		crimesDAO.updateCrimeGeoLocation(simpleCrime, expectedLocation);
@@ -126,7 +122,7 @@ public class CrimesDAOTest {
 	}
 
 	@Test
-	public void insertTwoCrimeCategories_retrieveTwoCrimeCategories() {
+	public void insertTwoCrimeCategories_retrieveSameTwoCrimeCategories() {
 		crimesDAO.addCrimecategory(cat2);
 		Crimecategory fightcat = crimesDAO.getCrimeCategory(cat2);
 		Crimecategory otherCat = crimesDAO.getCrimeCategory(cat);
@@ -136,7 +132,7 @@ public class CrimesDAOTest {
 	}
 
 	@Test
-	public void insertCrimeCategory_getCrimeCategoryBack() {
+	public void insertCrimeCategory_getSameCrimeCategoryBack() {
 
 		crimesDAO.addCrimecategory(cat2);
 
@@ -146,7 +142,7 @@ public class CrimesDAOTest {
 	}
 
 	@Test
-	public void getCrimeCategoryFromDBBAsedOnString() {
+	public void getCrimeCategoryFromDatasourceBasedOnString() {
 
 		crimesDAO.addCrimecategory(cat2);
 

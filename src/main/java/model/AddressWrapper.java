@@ -2,6 +2,12 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * WrapperClass for getting geoLocation ({@link Location}) through JSON data from Googles Geocode
+ * API. Highest level
+ * 
+ * @author Lina
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressWrapper {
 

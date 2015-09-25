@@ -11,6 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+/**
+ * 
+ * @author Lina
+ *
+ */
 public class XMLParserTest {
 
 	private String crimeTitle1;
@@ -45,20 +50,20 @@ public class XMLParserTest {
 	}
 
 	@Test
-	public void xmlFileWithTwoCrimes_SecondCrimeTitleSentInAsLatestCrimeTitle_OnlyFirstCrimeParsed()
+	public void xmlFileWithTwoCrimes_SecondCrimeAlreadyParsed_OnlyFirstCrimeParsed()
 			throws Exception {
 
 		XMLParser xmlParser = new XMLParser(correctRssFeed);
 
 		List<Crime> actualNewCrimes = xmlParser.parseNewCrimes(crimeTitle2);
-		
+
 		assertReflectionEquals(crime1, actualNewCrimes.get(0));
 		Assert.assertEquals(1, actualNewCrimes.size());
-		
+
 	}
 
 	@Test(expected = SAXException.class)
-	public void emptyXMLFileSentInForParsing() throws Exception {
+	public void emptyXMLFileSentInForParsing_SAXExceptionIsThrown() throws Exception {
 
 		String xml = "src\\test\\resources\\IncorrectCrimesRSS.xml";
 		XMLParser xmlParser = new XMLParser(xml);
@@ -67,7 +72,7 @@ public class XMLParserTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void nonExistingXMLFileSentInForParsing() throws Exception {
+	public void nonExistingXMLFileSentInForParsing_IOExceptionIsThrown() throws Exception {
 
 		String xml = "src\\test\\resources\\NotExistingXML.xml";
 		XMLParser xmlParser = new XMLParser(xml);

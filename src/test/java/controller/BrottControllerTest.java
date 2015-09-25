@@ -15,7 +15,13 @@ import service.CrimesDAO;
 
 public class BrottControllerTest {
 
-
+	/**
+	 * Creates a MockMVC using an in-memory database to check that correct
+	 * attributes are added to the model.
+	 * 
+	 * @author Lina
+	 * @throws Exception
+	 */
 	@Test
 	public void theShowDBStatisticsModelHasTwoAttributes() throws Exception {
 

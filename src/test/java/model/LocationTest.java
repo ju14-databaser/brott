@@ -3,6 +3,11 @@ package model;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * 
+ * @author Lina
+ *
+ */
 public class LocationTest {
 
 	@Test

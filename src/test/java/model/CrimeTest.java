@@ -3,7 +3,6 @@ package model;
 import static org.junit.Assert.assertEquals;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Date;
 
 import org.junit.Before;
@@ -21,8 +20,12 @@ public class CrimeTest {
 		crime = new Crime(TITLE, DESC);
 	}
 
+	/**
+	 * @author Lina
+	 * @throws Exception
+	 */
 	@Test
-	public void dateStampFormatParsedIsCorrectDay() throws ParseException {
+	public void dateStampFormatParsedIsCorrectDay() throws Exception {
 
 		DateFormat dF = DateFormat.getDateInstance(DateFormat.SHORT);
 
@@ -30,6 +33,9 @@ public class CrimeTest {
 		assertEquals(date, crime.getDateStamp());
 	}
 
+	/**
+	 * @author Anna, Lina
+	 */
 	@Test
 	public void locationStringGetsCorrectPartOfDesriptionString() {
 		String expectedLocation = "Sedelvägen, Tumba, Botkyrka, Sweden";
@@ -39,14 +45,17 @@ public class CrimeTest {
 
 	}
 
+	/**
+	 * @author Anna, Lina
+	 */
 	@Test
 	public void categoryStringGetsCorrectPartOfTitleString() {
 		String expectedCategory = " Skadegörelse";
-		
+
 		String actualCategory = crime.getCategory();
-		
+
 		assertEquals(expectedCategory, actualCategory);
-		
+
 	}
 
 }
