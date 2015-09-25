@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Databasens innehåll</title>
+<title>Admin</title>
 </head>
 
 <style type="text/css">
@@ -19,7 +19,7 @@ body {
 	height: 80px;
 	background-color: #FFFFFF;
 	color: #2879b3;
-	padding-left: 30%;
+	padding-left: 20%;
 	padding-top: 1%;
 	padding-bottom: 1%;
 }
@@ -46,10 +46,9 @@ body {
 }
 
 #dbinfo {
-	padding-left: 20%;
+	padding-left: 25%;
 	color: white;
-	padding-left: 30%;
-	padding-top: 5%;
+	padding-top: 2%;
 }
 
 </style>
@@ -63,9 +62,9 @@ body {
 		</div>
 
 	<div id=dbinfo>
-	<h2>Statistik och funktioner för databasen</h2>
+	<h2>Adminfunktioner för polishändelsedatabasen</h2>
 
-	<h3>Statistik</h3>
+	<h3>Info</h3>
 	<table>
 
 		<tr>
@@ -80,28 +79,41 @@ body {
 
 	</table>
 	<h3>Funktioner</h3>
+	
+	<I>Polisens RSS-feed tillåter enbart ETT anrop från server, för att hämta händelser<br>mer än en gång måste programmet startas om. Gäller ej geolocation.<br><br></I>
 
 	<table>
 		<tr>
-			<td>Hämta hela Polisens RSS feed för att fylla databasen:</td>
+			<td>Fyll tabeller vid nystart av databas:</td>
 			<td>
 				<form action="/Brott/load">
-					<input type="submit" value="hämta allt">
+					<input type="submit" value="Fyll">
+				</form>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>Hämta nya händelser från polisen:</td>
+			<td>
+				<form action="/Brott/New">
+					<input type="submit" value="Hämta">
 				</form>
 			</td>
 		</tr>
 
 		<tr>
-			<td>Uppdatera geolocation för 10 tomma i taget</td>
+			<td>Uppdatera geolocation manuellt för 10 händelser:</td>
 			<td>
 				<form action="/Brott/update">
-					<input type="submit" value="uppdatera">
+					<input type="submit" value="Uppdatera">
 				</form>
 			</td>
 		</tr>
 	</table>
 	Antal uppdaterade rader: ${updated }
+	<p>Följ länken till <a href="/Brott/brottkarta">händelsekartan</a>.</p>
 	</div>
+	
 
 </body>
 </html>
