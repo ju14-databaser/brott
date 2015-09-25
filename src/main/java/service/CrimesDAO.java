@@ -19,7 +19,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * CrimesDAO connects to a database specified in the persistence.xml file.
- *@author Erik, Lina, Anna
+ *
+ * @author Erik, Lina, Anna
  */
 
 @Component
@@ -119,8 +120,6 @@ public class CrimesDAO {
 	 * @param geoLocation
 	 */
 	public void updateCrimeGeoLocation(Crime crime, Location geoLocation) {
-		// TODO: Check that this works as expected, if the location can be added
-		// before updating
 		Object identifier = util.getIdentifier(crime);
 
 		Crime crimeQuery = em.find(Crime.class, identifier);
@@ -265,6 +264,18 @@ public class CrimesDAO {
 		List<Crimecategory> resultList = createQuery.getResultList();
 		closeConnection();
 		return resultList.get(0);
+	}
+
+	public void addCrimeCategories(List<Crimecategory> categories) {
+
+		openConnection();
+		categories.forEach(cat -> {
+
+			em.getTransaction().begin();
+			em.persist(cat);
+			em.getTransaction().commit();
+		});
+		closeConnection();
 	}
 
 }

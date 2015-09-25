@@ -2,6 +2,7 @@ package model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,9 +16,9 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import service.CrimesDAO;
+
 /**
- * Class for handling the crimes.
- * Has a scheduled job for updating geoLocations.
+ * Class for handling the crimes. Has a scheduled job for updating geoLocations.
  * 
  * @author Erik, Lina, Anna
  *
@@ -36,25 +37,26 @@ public class CrimeFacade {
 	}
 
 	/**
-	 * Constructor of the class. Uses autowiring through @Inject
-	 * Initializes the CrimesDAO class, geoLocationParser and prepares 
-	 * the allHasGeoLocation flag for the scheduled geoLocation job.
+	 * Constructor of the class. Uses autowiring through @Inject Initializes the
+	 * CrimesDAO class, geoLocationParser and prepares the allHasGeoLocation
+	 * flag for the scheduled geoLocation job.
 	 * 
-	 * @param crimesDAO The class which is handling database operations.
+	 * @param crimesDAO
+	 *            The class which is handling database operations.
 	 */
 	@Inject
 	public CrimeFacade(CrimesDAO crimesDAO) {
 		this.crimesDAO = crimesDAO;
 		geoLocationParser = new GeoLocationParser();
-		allHasGeoLocation=false;
+		allHasGeoLocation = false;
 	}
 
 	/**
-	 * This method reads new crimes from the police rss-feed. If the database doesn't 
-	 * contain any crimes it calls the getAllCrimesFromPolice() method which 
-	 * reads the whole rss-feed. If the table contains crimes,
-	 * it takes the latest crime from the table and reads the rss-feed until the latest crime has been matched.
-	 * Inserts the new crimes into the table.
+	 * This method reads new crimes from the police rss-feed. If the database
+	 * doesn't contain any crimes it calls the getAllCrimesFromPolice() method
+	 * which reads the whole rss-feed. If the table contains crimes, it takes
+	 * the latest crime from the table and reads the rss-feed until the latest
+	 * crime has been matched. Inserts the new crimes into the table.
 	 * 
 	 * @return The list of new crimes
 	 */
@@ -90,8 +92,7 @@ public class CrimeFacade {
 			newCrimes = new ArrayList<>();
 			return newCrimes;
 		}
-		// TODO: add geolocation
-		allHasGeoLocation=false;
+		allHasGeoLocation = false;
 		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
 		newCrimes = setCrimeCategory(newCrimes, crimeCat);
 		return newCrimes;
@@ -99,10 +100,11 @@ public class CrimeFacade {
 	}
 
 	/**
-	 * This method is called to insert crimes into the database.
-	 * Calls the addCrime method in CrimesDAO which inserts each crime into the table.
+	 * This method is called to insert crimes into the database. Calls the
+	 * addCrime method in CrimesDAO which inserts each crime into the table.
 	 * 
-	 * @param crimesToAdd The list of new Crimes
+	 * @param crimesToAdd
+	 *            The list of new Crimes
 	 */
 	public void writeCrimesToDB(List<Crime> crimesToAdd) {
 		crimesDAO.openConnection();
@@ -113,11 +115,13 @@ public class CrimeFacade {
 	}
 
 	/**
-	 * This method calls the parseAllCrimes() in XMLParser to get a list of crimes from the police rss-feed.
-	 * Calls the getCrimeCategorys in the crimesDAO class which fetches all the crime-categorys from our static
-	 * Crimecategory table. Calls the method setCrimeCategory which handles the mapping between crimes and categorys.
+	 * This method calls the parseAllCrimes() in XMLParser to get a list of
+	 * crimes from the police rss-feed. Calls the getCrimeCategorys in the
+	 * crimesDAO class which fetches all the crime-categorys from our static
+	 * Crimecategory table. Calls the method setCrimeCategory which handles the
+	 * mapping between crimes and categorys.
 	 * 
-	 * @return The list of crimes which now has a category mapped to each crime. 
+	 * @return The list of crimes which now has a category mapped to each crime.
 	 */
 	public List<Crime> getAllCrimesFromPolice() {
 		XMLParser xmlParser = new XMLParser(POLICE_RSS);
@@ -135,7 +139,6 @@ public class CrimeFacade {
 					e);
 			crimes = new ArrayList<>();
 			return crimes;
-			//TODO: Är detta vad vi vill göra? Hur vill vi hantera det för användaren här?
 		}
 
 		List<Crimecategory> crimeCat = crimesDAO.getCrimeCategorys();
@@ -144,14 +147,15 @@ public class CrimeFacade {
 			crimes = setCrimeCategory(crimes, crimeCat);
 
 		}
-		allHasGeoLocation= false;
+		allHasGeoLocation = false;
 		return crimes;
 	}
 
 	/**
 	 * Method that tries to find the category of the crime by searching through
-	 * the crimecategory table. Compares the crime-category read from the rss-feed to our crime-categorys from our table. 
-	 * If no category was found, it sets it to "Övrigt".
+	 * the crimecategory table. Compares the crime-category read from the
+	 * rss-feed to our crime-categorys from our table. If no category was found,
+	 * it sets it to "Övrigt".
 	 * 
 	 * @param crimes
 	 *            list of crimes without categorys
@@ -168,9 +172,9 @@ public class CrimeFacade {
 			}
 		}
 		boolean foundCat;
-		for(Crime crime : crimes){
+		for (Crime crime : crimes) {
 			foundCat = false;
-			
+
 			crime.setGeoLocation(geoLocationParser.getGeoLocation(crime.getLocation()));
 
 			for (int i = 0; i < crimeCat.size(); i++) {
@@ -182,20 +186,20 @@ public class CrimeFacade {
 					break;
 				}
 			}
-			
+
 			if (foundCat == false) {
 				crime.setCrimecategory(notFound);
 			}
-			
 
 		}
 		return crimes;
 	}
 
 	/**
-	 * A scheduled job which checks for crimes in our table, which are dont have geoLocations.
-	 * Calls the updateGeolocations() which tries to get the coordinates from the google geocode-api.
-	 * Only does this if the last job didn't succeed in updating all locations.
+	 * A scheduled job which checks for crimes in our table, which are dont have
+	 * geoLocations. Calls the updateGeolocations() which tries to get the
+	 * coordinates from the google geocode-api. Only does this if the last job
+	 * didn't succeed in updating all locations.
 	 */
 	@Scheduled(fixedDelay = 60000, initialDelay = 60000)
 	public void updateGeoLocationsScheduled() {
@@ -217,10 +221,11 @@ public class CrimeFacade {
 	}
 
 	/**
-	 * This method fetches all crimes from the table and calls the geoLocationParser to fetch coordinates for 
-	 * crimes without geoLocations.
-	 * If coordinates were found, it updates the crime in the table.
-	 * If the limit of 10 updates per job has been reached, returns the amount of updated crimes.
+	 * This method fetches all crimes from the table and calls the
+	 * geoLocationParser to fetch coordinates for crimes without geoLocations.
+	 * If coordinates were found, it updates the crime in the table. If the
+	 * limit of 10 updates per job has been reached, returns the amount of
+	 * updated crimes.
 	 * 
 	 * @return The amount of crimes that were updated.
 	 */
@@ -263,7 +268,8 @@ public class CrimeFacade {
 	}
 
 	/**
-	 * Fetches all the crimes from the table by calling the getAllCrimes() method in CrimesDAO class.
+	 * Fetches all the crimes from the table by calling the getAllCrimes()
+	 * method in CrimesDAO class.
 	 * 
 	 * @return The list of crimes from the table.
 	 */
@@ -283,7 +289,8 @@ public class CrimeFacade {
 	}
 
 	/**
-	 * Fetches all the crime-category's from the table by calling the getCrimeCategorys method in crimesDAO class. 
+	 * Fetches all the crime-category's from the table by calling the
+	 * getCrimeCategorys method in crimesDAO class.
 	 * 
 	 * @return The list of category's from the table.
 	 */
@@ -300,7 +307,31 @@ public class CrimeFacade {
 		}
 		return crimecat;
 	}
-	
+
+	public void populateCrimeCategoryTable() {
+		List<Crimecategory> crimecategories = Arrays.asList(new Crimecategory("Bedrägeri", "Y"),
+				new Crimecategory("Olaga intrång", "Y"), new Crimecategory("Inbrott", "Y"),
+				new Crimecategory("Misshandel", "Y"), new Crimecategory("Motorfordon", "Y"),
+				new Crimecategory("Olaga hot", "Y"), new Crimecategory("Rån", "Y"),
+				new Crimecategory("Skadegörelse", "Y"), new Crimecategory("Stöld", "Y"),
+				new Crimecategory("Våldtäkt", "Y"), new Crimecategory("Bråk", "Y"),
+				new Crimecategory("Olycka , olycksfall", "N"),
+				new Crimecategory("Försvunnen", "N"), new Crimecategory("Trafikolycka", "N"),
+				new Crimecategory("Arbetsplatsolycka", "N"), new Crimecategory("Brand", "Y"),
+				new Crimecategory("Snatteri", "Y"), new Crimecategory("Narkotikabrott", "Y"),
+				new Crimecategory("Rattfylleri", "N"), new Crimecategory("Frihetsberövande", "Y"),
+				new Crimecategory("Våld", "Y"), new Crimecategory("Kontroll person/fordon", "N"),
+				new Crimecategory("Anträffat gods", "N"), new Crimecategory("Vapenlagen", "Y"),
+				new Crimecategory("Fylleri/LOB", "Y"), new Crimecategory("Trafikbrott", "N"),
+				new Crimecategory("Knivlag", "Y"), new Crimecategory("Trafikhinder", "N"),
+				new Crimecategory("Ofredande/förargelse", "Y"), new Crimecategory(
+						"Djur skadat/omhändertaget", "N"), new Crimecategory("Övrigt", "N"),
+				new Crimecategory("Mord", "Y"), new Crimecategory("Bråk", "Y"));
+
+		crimesDAO.addCrimeCategories(crimecategories);
+
+	}
+
 	/**
 	 * 
 	 * @return the flag which checks if all the crimes have geoLocation.

@@ -12,7 +12,6 @@ public class CrimeTest {
 
 	private static final String TITLE = "2015-09-13 15:53, Skadegörelse, Botkyrka";
 	private static final String DESC = "Sedelvägen, Tumba. Barn krossat rutor på förskola.";
-	private static final String INCORRECT_DESC = "Sedelvägen, Tumba Barn krossat rutor på förskola.";
 	private Crime crime;
 
 	@Before

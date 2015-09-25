@@ -44,6 +44,11 @@ public class Crimecategory implements Serializable {
 	public Crimecategory() {
 	}
 
+	public Crimecategory(String category,String isRelevant){
+		this.category = category;
+		isrelevant = isRelevant;
+	}
+	
 	/**
 	 * 
 	 * @return The ID of the category.

@@ -29,8 +29,6 @@ public class XMLParser {
 	private static final Logger LOGGER = LoggerFactory.getLogger(XMLParser.class);
 	private String rssFeedSource;
 
-	// TODO: Do we need to have a constructor here or can the methods be static
-	// instead?
 
 	/**
 	 * Constructor where the RSS feed is sent in.

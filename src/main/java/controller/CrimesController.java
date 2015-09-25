@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * Spring MVC Controller for the Brott web-applikation. Using annotations in
  * connection with spring-beans to handle the web-requests.
- *@author Lina, Anna, Erik
+ *
+ * @author Lina, Anna, Erik
  *
  */
 @Controller
@@ -109,6 +110,9 @@ public class CrimesController {
 	 */
 	@RequestMapping("/load")
 	public String loadDatabaseWithAllCrimes(Model model) {
+
+		crimeFacade.populateCrimeCategoryTable();
+		
 		List<Crime> allCrimesFromPolice = crimeFacade.getAllCrimesFromPolice();
 		crimeFacade.writeCrimesToDB(allCrimesFromPolice);
 

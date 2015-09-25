@@ -30,7 +30,7 @@ public class BrottControllerTest {
 		CrimesController controller = new CrimesController(crimeHandler);
 		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-		MvcResult andReturn = mockMvc.perform(get("/statistik")).andExpect(status().isOk())
+		MvcResult andReturn = mockMvc.perform(get("/admin")).andExpect(status().isOk())
 				.andExpect(forwardedUrl("dbInfo")).andReturn();
 		Assert.assertTrue(andReturn.getModelAndView().getModel().containsKey("noRows"));
 		Assert.assertTrue(andReturn.getModelAndView().getModel().containsKey("noEmpty"));

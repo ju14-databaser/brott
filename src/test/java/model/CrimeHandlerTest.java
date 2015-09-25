@@ -6,21 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import service.CrimesDAO;
 
 public class CrimeHandlerTest {
 
-	// TODO: Kör ett integrationstest - läs in en xml fil via parser och
-	// kontrollera att innehållet hamnar i en databas (helst en embedded db
-	// enbart för test)
-
 	/**
+	 * 
+	 * Annotation Ignore due to that an internetconnection is needed for this test to run.
 	 * @author Lina
 	 * 
 	 * @throws Exception
 	 */
+	@Ignore
 	@Test
 	public void updateGeoLocationsStopsWhenReachingEndOfDatabase() throws Exception {
 		CrimesDAO crimesDAO = new CrimesDAO("TestDB");
