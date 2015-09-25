@@ -28,7 +28,7 @@ body {
 	height: 80px;
 	background-color: #FFFFFF;
 	color: #2879b3;
-	padding-left: 30%;
+	padding-left: 25%;
 	padding-top: 1%;
 	padding-bottom: 1%;
 }
@@ -207,7 +207,7 @@ li {
 <body onload="initialize()">
 
 	<div id="header">
-		<h1 class=stencil>POLISHÄNDELSER</h1>
+		<h1 class=stencil>POLISHÄNDELSER  </h1>
 		<h1 class=consolas>i Stockholm</h1>
 		<img class=logo src="http://nomakhaza.co.za/criminal.png"
 			alt="logo burgler" />
