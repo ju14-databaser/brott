@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * CrimesDAO connects to a database specified in the persistence.xml file.
- *
+ *@author Erik, Lina, Anna
  */
 
 @Component

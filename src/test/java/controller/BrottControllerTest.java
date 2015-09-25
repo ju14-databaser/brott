@@ -3,7 +3,7 @@ package controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import model.CrimeHandler;
+import model.CrimeFacade;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class BrottControllerTest {
 	public void theShowDBStatisticsModelHasTwoAttributes() throws Exception {
 
 		CrimesDAO crimesDAO = new CrimesDAO("TestDB");
-		CrimeHandler crimeHandler = new CrimeHandler(crimesDAO);
+		CrimeFacade crimeHandler = new CrimeFacade(crimesDAO);
 		CrimesController controller = new CrimesController(crimeHandler);
 		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 

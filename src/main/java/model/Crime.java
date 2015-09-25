@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 /**
- * @author 
+ * @author Erik, Lina
  * The persistent class for the CRIMES database table.
  */
 @Entity
@@ -109,7 +109,6 @@ public class Crime implements Serializable {
 	}
 
 	/**
-	 * @author 
 	 * 
 	 * Method that gets category from crime by reading right string from title.
 	 * @return the part of the title string that is between the first and the
@@ -125,7 +124,6 @@ public class Crime implements Serializable {
 	}
 	
 	/**
-	 * @author 
 	 * 
 	 * Method that creates location from description and title, by sorting with "." and ",".
 	 */
@@ -144,7 +142,6 @@ public class Crime implements Serializable {
 	}
 
 	/**
-	 * @author 
 	 * 
 	 * Will populate the dateStamp with a date from the beginning of the title
 	 * string. The date will only capture the Date, not the Time

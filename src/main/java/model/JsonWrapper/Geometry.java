@@ -1,6 +1,8 @@
-package model;
+package model.JsonWrapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import model.Location;
 
 /**
  * WrapperClass for getting geoLocation ({@link Location})through JSON data from Googles Geocode

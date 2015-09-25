@@ -1,4 +1,4 @@
-package model;
+package model.JsonWrapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

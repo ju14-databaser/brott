@@ -24,7 +24,7 @@ public class CrimeHandlerTest {
 	@Test
 	public void updateGeoLocationsStopsWhenReachingEndOfDatabase() throws Exception {
 		CrimesDAO crimesDAO = new CrimesDAO("TestDB");
-		CrimeHandler crimeHandler = new CrimeHandler(crimesDAO);
+		CrimeFacade crimeHandler = new CrimeFacade(crimesDAO);
 
 		String correctRssFeed = "src/test/resources/CrimesRSSForDBTests.xml";
 		XMLParser xmlParser = new XMLParser(correctRssFeed);
@@ -56,7 +56,7 @@ public class CrimeHandlerTest {
 	public void checkIfRightCategoryFound() throws Exception {
 
 		CrimesDAO crimesDAO = new CrimesDAO("Crimes");
-		CrimeHandler crimeHandler = new CrimeHandler(crimesDAO);
+		CrimeFacade crimeHandler = new CrimeFacade(crimesDAO);
 
 		List<Crimecategory> crimecat = crimeHandler.getAllCategorysFromDB();
 		List<Crime> crimeList = new ArrayList<Crime>();

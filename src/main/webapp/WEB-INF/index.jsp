@@ -102,6 +102,13 @@ li {
 	
 	var map;
 	var markerArray = [];
+	var pinIcon = new google.maps.MarkerImage(
+		    "http://www.clker.com/cliparts/E/C/p/S/0/F/exclamation-mark-red-md.png",
+		    null, /* size is determined at runtime */
+		    null, /* origin is 0,0 */
+		    null, /* anchor is bottom center of the scaled image */
+		    new google.maps.Size(18, 18)
+		);
 	function initialize() {
 	//	geocoder = new google.maps.Geocoder();
 		var mapOptions = {
@@ -133,7 +140,8 @@ li {
 				var marker = new google.maps.Marker({
 					map : map,
 					position : geoLocation,
-					title : '${crimes.title}',
+					icon: pinIcon,
+					title: '${crimes.title}',
 					category:'${crimes.crimecategory.category}',
 					relevant:'${crimes.crimecategory.isrelevant}'
 				});

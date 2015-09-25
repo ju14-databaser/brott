@@ -5,7 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import model.Crime;
-import model.CrimeHandler;
+import model.CrimeFacade;
 import model.Crimecategory;
 
 import org.springframework.stereotype.Controller;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * Spring MVC Controller for the Brott web-applikation. Using annotations in
  * connection with spring-beans to handle the web-requests.
- *
+ *@author Lina, Anna, Erik
  *
  */
 @Controller
 public class CrimesController {
 
-	private CrimeHandler crimeHandler;
+	private CrimeFacade crimeHandler;
 
 	/**
 	 * Constructor for the Spring MVC Controller. Uses autowiring through @Inject
@@ -34,7 +34,7 @@ public class CrimesController {
 	 *            startup.
 	 */
 	@Inject
-	public CrimesController(CrimeHandler crimeHandler) {
+	public CrimesController(CrimeFacade crimeHandler) {
 		this.crimeHandler = crimeHandler;
 
 	}

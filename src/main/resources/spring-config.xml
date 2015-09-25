@@ -13,7 +13,7 @@
 		a configuration for task: annotaion-driven -->
 	<task:annotation-driven />
 	<bean name="Controller" class="controller.CrimesController" />
-	<bean name="CrimeHandler" class="model.CrimeHandler" />
+	<bean name="CrimeHandler" class="model.CrimeFacade" />
 	<bean name="CrimesDAO" class="service.CrimesDAO">
 		<property name="persistenceUnitName" ref="persistenceUnit" />
 	</bean>

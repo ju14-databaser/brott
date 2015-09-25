@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import model.JsonWrapper.AddressWrapper;
+import model.JsonWrapper.AdressResultsWrapper;
+
 /**
  * GeoLocationParser uses Google API for geocodes to search geolocations
  * 

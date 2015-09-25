@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * Class for parsing the Police RSS feed into Crime Objects
+ * Class for parsing the Police RSS feed into Crime Objects.
  * 
  * @author Erik, Lina
  *
@@ -30,8 +30,8 @@ public class XMLParser {
 	private String rssFeedSource;
 
 	// TODO: Do we need to have a constructor here or can the methods be static
-	// instead?	
-	
+	// instead?
+
 	/**
 	 * Constructor where the RSS feed is sent in.
 	 * 
@@ -48,7 +48,9 @@ public class XMLParser {
 	}
 
 	/**
-	 * Method for getting all crimes from the police rss feed.
+	 * Method for reading and creating crime-objects from the police rss-feed.
+	 * For each parent node "item", it extracts the title & description which is
+	 * used to create the crime object.
 	 * 
 	 * @return a list of Crimes
 	 * @throws IOException
@@ -93,7 +95,7 @@ public class XMLParser {
 	 *            the title of the latest crime existing in the Database
 	 * @return a list of all new Crimes
 	 * @throws SAXException
-	 *             if the RSS source has incorrect formatting
+	 *             if the RSS source has incorrect formatting.
 	 * @throws IOException
 	 *             if there was problems connecting to the rss feed.
 	 */
@@ -129,6 +131,16 @@ public class XMLParser {
 		return crimes;
 	}
 
+	/**
+	 * Creates and parses the dom element from the police Rss-feed. Creates a
+	 * nodelist of all the items in the document.
+	 * 
+	 * @return The nodelist of all the items.
+	 * @throws SAXException
+	 *             if the RSS source has incorrect formatting.
+	 * @throws IOException
+	 *             if there was problems connecting to the rss feed.
+	 */
 	private NodeList parsedRSSAsAList() throws SAXException, IOException {
 		LOGGER.debug("Skapar dokument för att parsa RSS");
 		Document document = documentBuilder.parse(rssFeedSource);
@@ -139,6 +151,15 @@ public class XMLParser {
 		return items;
 	}
 
+	/**
+	 * Returns the value of the node child. For e.x Title or description.
+	 * 
+	 * @param Parent
+	 *            The parent node, in this case the tag "item"
+	 * @param NodeName
+	 *            the tag / node name, in this case title & description
+	 * @return The node value.
+	 */
 	private String getValueFromNode(Element parent, String nodeName) {
 		return parent.getElementsByTagName(nodeName).item(0).getFirstChild().getNodeValue();
 	}
