@@ -11,31 +11,37 @@
 body {
 	font-family: Verdana, Geneva, sans-serif;
 	background-color: #539ADF;
-	color: white;
 	padding: 0px;
 	height: 100%;
 }
 
 #header {
-	height: 70px;
-	margin: 0px auto;
+	height: 80px;
 	background-color: #FFFFFF;
 	color: #2879b3;
-	padding-left: 35%;
+	padding-left: 30%;
 	padding-top: 1%;
+	padding-bottom: 1%;
+}
+
+.logo {
+	 width: 65px;
+    height: 65px;
+    float:left;
+    padding-right: 1%;
 }
 
 .consolas {
 	margin: 0px auto;
 	font-size: 2.5em;
-	font-family: "Consolas";
+	font-family: "Consolas", "Monaco", "Monospace";
 	display: inline;
 }
 
 .stencil {
 	margin: 0px auto;
-	font-size: 3.5em;
-	font-family: "Stencil";
+	font-size: 4em;
+	font-family: Impact, Charcoal, sans-serif;
 	display: inline;
 }
 
@@ -51,8 +57,9 @@ body {
 <body>
 
 		<div id="header">
-			<h1 class=stencil>BROTT  </h1>
+			<h1 class=stencil>POLISHÄNDELSER  </h1>
 			<h1 class=consolas> i Stockholm</h1>
+			<img class=logo src="http://nomakhaza.co.za/criminal.png" alt="logo burgler" />
 		</div>
 
 	<div id=dbinfo>
