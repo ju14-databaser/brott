@@ -16,25 +16,25 @@ body {
 }
 
 #header {
-	height: 70px;
+	height: 80px;
 	margin: 0px auto;
 	background-color: #FFFFFF;
 	color: #2879b3;
-	padding-left: 35%;
+	padding-left: 25%;
 	padding-top: 1%;
 }
 
 .consolas {
 	margin: 0px auto;
 	font-size: 2.5em;
-	font-family: "Consolas";
+	font-family: "Consolas", "Monaco", "Monospace";
 	display: inline;
 }
 
 .stencil {
 	margin: 0px auto;
-	font-size: 3.5em;
-	font-family: "Stencil";
+	font-size: 4em;
+	font-family: Impact, Charcoal, sans-serif;
 	display: inline;
 }
 
@@ -62,6 +62,8 @@ body {
 	</div>
 	<div class=textShown>
 	<p>Antal brott som blivit inlästa: ${crimeNo }</p>
+	<p>Följ länken till <a href="/Brott/admin">adminfunktioner</a>.</p>
+	<p>Följ länken till <a href="/Brott/brottkarta">händelsekartan</a>.</p>
 	</div>
 
 
